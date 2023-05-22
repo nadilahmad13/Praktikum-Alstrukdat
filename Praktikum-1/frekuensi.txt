@@ -1,0 +1,24 @@
+Diberikan sebuah string dengan panjang karakter maksimal 10 huruf. Tentukan banyaknya frekuensi angka 0-9 dalam string tersebut!
+
+Buatlah program dengan nama: frekuensi.c
+
+Input:
+Sebuah string alfanumerik dengan panjang maksimal 10 huruf
+
+Output:
+Jumlah kemunculan angka 0-9 dalam string tersebut
+
+Contoh Input:
+a1123h56
+
+Contoh Output:
+0211011000
+
+Penjelasan:
+Dalam input
+-Frekuensi kemunculan angka 0,4,7,8,9 adalah 0 kali 
+-Frekuensi kemunculan angka 2,3,4,5 adalah 1 kali
+-Frekuensi kemunculan angka 1 adalah 2x
+
+Note: terdapat newline setelah keluaran output 
+Hint: Nilai ASCII dari angka 0 adalah 48 dan praktikan dapat menggunakan fungsi strlen dari library string.h untuk menghitung panjang input karakter
