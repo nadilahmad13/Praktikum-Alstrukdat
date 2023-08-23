@@ -1,0 +1,38 @@
+Program CircularBuffer
+    constant Nil      : integer = -1
+    constant CAPACITY : integer = 100
+
+    type ElType : < id  : integer,
+                   cost : integer>
+
+    type Queue  : <buffer  : array [0..CAPACITY-1] of ElType, {Array Elemen}
+                   IdxHead : integer, {Elemen Terdepan}
+                   count   : integer {Banyaknya elemen dalam queue} >
+
+
+function isFull (q: Queue) → boolean
+    {mengirim true jika q penuh}
+    → (q.count == CAPACITY)
+
+procedure enqueue (input/output q: Queue, input val: ElType)
+    {Proses: menambahkan val pada q sebagai Tail baru}
+    {I.S. : q mungkin kosong, q tidak penuh}
+    {F.S. : val menjadi Tail baru dengan mekanisme circular buffer}
+
+    if not isFull(q) then
+        q.buffer[(q.IdxHead + q.count - 1) mod CAPACITY] <- val
+        q.count <- q.count + 1
+
+procedure dequeue (input/output q: Queue, output val: ElType)
+    {Proses: menyimpan nilai Head q ke val dan menghapus Head q}
+    {I.S. : q tidak kosong}
+    {F.S. : val adalah nilai elemen Head, Head “bergerak” dengan mekanisme circular buffer. q mungkin kosong}
+
+    val <- q.buffer[q.IdxHead]
+    q.buffer[q.IdxHead] <- Nil
+    q.count <- q.count - 1
+    if (q.count = 0) then
+        q.IdxHead <- Nil
+
+    else then
+        q.IdxHead <- (q.IdxHead + 1) mod CAPACITY

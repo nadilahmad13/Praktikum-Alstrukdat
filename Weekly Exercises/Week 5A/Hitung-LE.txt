@@ -1,0 +1,23 @@
+{ Diberikan sebuah mesin karakter dengan pita berisi karakter (munkgin kosong),
+  Buatlah algoritma untuk menghitung banyaknya pasangan huruf 'L' dan 'E' yang
+  ada pada pita tersebut. Banyaknya pasangan huruf 'L' dan 'E' pada pita kosong
+  adalah nol.}
+
+function HitungLE (input s: string): integer;
+{ Menghitung banyaknya pasangan huruf 'L' dan 'E' pada pita s. }
+
+{ KAMUS LOKAL }
+   count : integer
+
+{ ALGORITMA }
+    count <- 0
+    start
+    while (CC != MARK) do
+        if (CC == 'L') then
+            ADV
+            if (CC == 'E') then
+                count <- count + 1
+            else
+                adv
+        else
+            adv

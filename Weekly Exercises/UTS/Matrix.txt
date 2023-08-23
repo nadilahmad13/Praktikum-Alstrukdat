@@ -1,0 +1,142 @@
+= = = = = = = MATRIX = = = = = = =
+
+{ Ukuran maksimum baris dan kolom }
+constant ROW_CAP : integer = 100
+constant COL_CAP : integer = 100
+
+{ Definisi Type Matrix dengan indeks integer }
+type ElType : integer
+type Matrix :
+    < mem   : matrix[0..COL_CAP-1 , 0..ROW_CAP-1] of ElType,
+     rowEff : integer, { ukuran baris yang terdefinisi }
+     colEff : integer { ukuran kolom yang terdefinisi } >
+     { Memori matriks yang dipakai selalu di "ujung kiri atas" }
+
+{ ********** DEFINISI PROTOTIPE PRIMITIF ********** }
+{ *** Konstruktor membentuk Matrix *** }
+procedure CreateMatrix(output m: Matrix, input nRows, nCols: integer)
+    { Membentuk sebuah Matrix “kosong” berukuran nRows x nCols di “ujung kiri” memori }
+    { I.S. nRows dan nCols adalah valid untuk memori matriks yang dibuat }
+    { F.S. sebuah matriks m sesuai dengan def di atas terbentuk }
+
+{ *** Untuk sebuah matriks m yang terdefinisi: *** }
+function getRowEff (m : Matrix) -> integer
+    { Mengirimkan jumlah baris Matriks m }
+function getCollEff(m: Matrix) → integer
+    { Mengirimkan jumlah kolom Matriks m } 
+function isMatrixIdxValid(i, j: integer) → boolean
+    { Mengirimkan true jika i, j adalah indeks yang valid sesuai kapasitas maksimum
+    sebuah Matrix, ROW_CAP dan COL_CAP }
+function isIdxEff (m: Matrix, i, j: integer) → boolean
+    { Mengirimkan true jika i, j adalah indeks efektif bagi m }
+function getElmt (m: Matrix, i, j: integer) → ElType
+    { Mengirimkan elemen m dg nomor baris i dan nomor kolom j }
+
+{ *** Operasi mengubah nilai elemen matriks: Set / Assign *** }
+procedure setRowEff (input/output m: Matrix, input nRows: integer)
+    { I.S. m sudah terdefinisi }
+    { F.S. Nilai m.rowEff diisi dengan nRows, }
+procedure setColEff (input/output m: Matrix, input nCols: integer)
+    { I.S. m sudah terdefinisi }
+    { F.S. Nilai m.colEff diisi dengan nCols }
+procedure setElmt (input/output m: Matrix, input i, j: integer, input x: ElType)
+    { I.S. m sudah terdefinisi }
+    { F.S. m(i,j) bernilai x }
+    { Proses: Mengisi m(i,j) dengan x }
+    
+{ ********** Assignment Matrix ********** } 
+procedure copyMatrix(input source: Matrix, output target: Matrix) 
+{ Melakukan assignment target ← source }
+
+
+= = = = = = = LATIHAN 1 = = = = = = =
+procedure readMatrix (output m : Matrix)
+    { I.S. sembarang }
+    { F.S. Ukuran efektif dan semua elemen m terdefinisi }
+    { Proses : Membaca masukan ukuran baris dan kolom efektif 
+               dari keyboard dan melakukan CreateMatrix dan
+               mengisi nilai efektifnya.
+               Mengisi elemen m dengan pembacaan dari keyboard secara
+               traversal per baris}
+
+    KAMUS LOKAL
+        i, j, baris, kolom, x : integer
+    ALGORITMA
+        { Input ukuran matrix }
+        input (baris)
+        input (kolom) 
+
+        { Membuat matrix kosong }
+        CreateMatrix (m, baris, kolom)
+        setRowEff (m, baris)
+        setColEff (m, kolom)
+
+        { Input elemen matrix }
+        i Traversal 0..getRowEff(m)-1
+            j Traversal 0..getCollEff(m)-1
+                input (x)
+                setElmt (m, i, j, x)
+
+= = = = = = = LATIHAN 2 = = = = = = =
+function isMatrixEqual (m1, m2 : Matrix) -> boolean
+    { Mengirimkan true jika m1 = m2, yaitu ukuran efektif m1 dan m2 sama dan Untuk
+      setiap i,j yang merupakan indeks baris dan kolom, m1[i,j] = m2[i,j] }
+      
+    KAMUS LOKAL
+      i,j : integer
+      isEq : boolean
+  
+    ALGORITMA
+        isEq ← true
+        { Cek Kondisi Panjang Matrix }
+        if (getRowEff(m1) ≠ getRowEff(m2)) or (getColEff(m1) ≠ getColEff(m2)) then
+            isEq ← false
+        
+        else
+            { Looping cek isi dari matrix }
+            while (i ≤ getRowEff(m1)) and (isEq) do
+                while (j ≤ getColEff(m1)) and (isEq) do
+                    if (getElmt(m1,i,j) ≠ getElmt(m2,i,j)) then
+                        isEq ← false
+                    else
+                        j ← j + 1
+                i ← i + 1
+        -> isEq
+
+= = = = = = = LATIHAN 3 = = = = = = =
+function isSparse (m : Matrix) -> boolean
+    { Mengirimkan true jika m adalah matriks sparse: Matriks "jarang" dengan
+      definisi: hanya maksimal 5% dari memori matriks yang efektif bukan bernilai 0 }
+
+    KAMUS LOKAL
+        i, j, count : integer
+
+    ALGORITMA
+        count ← 0
+        i Traversal 0..getRowEff(m)-1
+            j Traversal 0..getCollEff(m)-1
+                if (getElmt(m,i,j) ≠ 0) then
+                    count ← count + 1
+
+        -> (count < (getRowEff(m) * getCollEff(m) * 0.05))
+
+= = = = = = = LATIHAN 4 = = = = = = =
+function transpose (m : Matrix) -> Matrix
+    { Menghasilkan transpose dari m yaitu setiap elemen m[i,j] ditukar nilainya
+      dengan elemen m[j,i] }
+
+    KAMUS LOKAL
+        i,j : integer
+
+    ALGORITMA
+        { Membuat matrix kosong }
+        CreateMatrix (mT, getRowEff(m), getColEff(m))
+        setRowEff (mT, getRowEff(m))
+        setColEff (mT, getColEff(m))
+
+        { Looping transpose }
+        i Traversal 0..getRowEff(m)-1
+            j Traversal 0..getCollEff(m)-1
+                setElmt (mT, i, j, getElmt(m,j,i))
+
+        -> mT

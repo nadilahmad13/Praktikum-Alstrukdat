@@ -1,0 +1,19 @@
+Function MaxArray(output Max : integer, input T : Array of integers, input N : integer)
+    {I.S. : Menerima input sebuah array dan jumlah elemen array
+     F.S. : Mengembalikan nilai terbesar dari array tersebut}
+
+KAMUS LOKAL
+    i : integer {Variabel traversal}
+
+ALGORITMA
+    {T Merupakan array yang akan dihitung
+     N Merupakan jumlah elemen array}
+    
+    Max <- T[1] {Menginisialisasi nilai Max dengan nilai elemen pertama}
+
+    if (N > 1) then {Jika jumlah elemen array lebih dari 1, karena jika jumlah elemen hanya 1, maka tidak ada yang lebih besar}
+        i traversal [2..N] {Melakukan traversal dari elemen pertama hingga elemen terakhir}
+            if (T[i] > Max) then
+                Max <- T[i]
+    
+    -> Max {Mengembalikan nilai terbesar}

@@ -1,0 +1,54 @@
+= = = = = MESIN KARAKTER = = = = =
+
+{ Primitif terkait posisi pita }
+
+procedure start
+{ Mesin siap dioperasikan. Pita disiapkan untuk dibaca.
+  Karakter pertama yang ada pada pita posisinya adalah pada jendela. 
+  I.S. : sembarang 
+  F.S. : CC adalah karakter pertama pada pita
+         Jika CC != MARK maka EOP akan padam (false)
+         Jika CC = MARK maka EOP akan menyala (true) }
+
+procedure adv
+{ Pita dimajukan satu karakter. 
+  I.S. : Karakter pada jendela = CC,
+         CC != MARK
+  F.S. : CC adalah karakter berikutnya dari CC yang lama, 
+         CC mungkin = MARK
+         Jika  CC = MARK maka EOP akan menyala (true) }
+
+{ = = = = = = Studi Kasus Mesin Karakter (1) - CountKarakter = = = = = = =}
+Program CountCharacters
+{ SKEMA PEMROSESAN DENGAN MARK :
+  menghitung banyaknya huruf pada pita karakter }
+
+KAMUS
+    ctr : integer
+
+ALGORITMA
+    ctr ← 0
+    start
+    while (cc != MARK) do
+        ctr ← ctr + 1
+        adv
+    { cc = MARK }
+    output (ctr)
+
+{ = = = = = = Latihan-1 : Hitung-LE = = = = = = }
+Program HitungLE
+{ SKEMA PEMROSESAN DENGAN MARK :
+  menghitung banyaknya huruf 'L' dan 'E' pada pita karakter }
+
+KAMUS
+    ctr : integer
+
+ALGORITMA
+    ctr ← 0
+    start
+    while (cc != MARK) do
+        if (cc = 'L') or (cc = 'E') then
+            ctr ← ctr + 1
+        adv
+    { cc = MARK }
+    output (ctr)

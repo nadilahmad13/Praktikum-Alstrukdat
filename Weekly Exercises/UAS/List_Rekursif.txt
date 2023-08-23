@@ -1,0 +1,115 @@
+{ SOAL NO 1 }
+function countPos (l:List) → integer
+    {Buatlah fungsi countPos yang menghitung banyaknya kemunculan bilangan positif (>0) 
+    dari sebuah list of integer l}
+    { Menghasilkan banyaknya kemunculan bilangan positif (>0) 
+    pada l }
+
+    { KAMUS LOKAL }
+
+    { ALGORITMA }
+        if (isEmpty(l)) then
+            -> 0
+        else
+            if (l^.head > 0) then
+                -> 1 + countPos(l^.tail)
+            else
+                -> countPos(l^.tail)
+
+{ SOAL NO 2 }
+function sumPos (l: List) → integer
+    {Buatlah fungsi sumPos yang menghitung penjumlahan semua elemen bilangan positif (>0) dari sebuah list of integer l. 
+    Jika list l kosong, hasilnya adalah 0.}
+    { Menghasilkan penjumlahan semua elemen bilangan positif (>0) dari l. 
+    l kosong menghasilkan 0. }
+
+    { KAMUS LOKAL }
+
+    { ALGORITMA }
+        if (isEmpty(l)) then
+            -> 0
+        else
+            if(l^.head > 0) then
+                -> l^.head + sumPos(l^.tail)
+            else
+                -> sumPos(l^.tail)
+
+{ SOAL NO. 3 }
+function isMember (l:List, x:ElType) → boolean
+    { Buatlah fungsi isMember yang memeriksa apakah sebuah x (integer) merupakan
+    anggota pada sebuah list of integer l }
+    { Menghasilkan true jika x adalah salah satu anggota list l, 
+    false jika tidak }
+
+    { KAMUS LOKAL }
+
+    { ALGORITMA }
+        if (isEmpty(l)) then
+            -> false
+        else
+            if (l^.head = x) then
+                -> true
+            else
+                -> isMember(l^.tail,x)
+
+{ SOAL  NO. 4 }
+function isEqual(l1,l2:List) → boolean
+    { Buatlah fungsi isEqual yang memeriksa apakah dua buah list of integer l1 dan l2 adalah 
+        list yang sama. Sama artinya banyaknya elemen sama dan urutan kemunculan semua 
+        elemen juga sama. }
+    { Menghasilkan true jika l1 dan l2 adalah list yang sama, 
+    false jika tidak }
+
+    { KAMUS LOKAL }
+
+    { ALGORITMA }
+        if (isEmpty(l1) and isEmpty(l2)) then
+            -> true
+        else if (length(l1) != length(l2)) the
+            -> false
+        else
+            if (l1^.head = l2^.head) then
+                -> isEqual(l1^.tail, l2^.tail)
+            else
+                -> false
+
+{ SOAL NO. 5 }
+procedure extremes(input l:List, output min,max:integer)
+    {Buatlah procedure extremes yang menerima masukan sebuah list of integer yang tidak 
+        kosong dan menghasilkan nilai minimum dan maksimum dari list tersebut }
+    { I.S. l terdefinisi, tidak kosong }
+    { F.S. min berisi nilai minimum elemen l,
+    max berisi nilai maksimum elemen l }
+
+    { KAMUS LOKAL }
+        - 
+
+    { ALGORITMA }
+        if (isOneElmt(l)) then
+            min <- l^.head
+            max <- l^.head
+        else
+            extremes(l^.tail, min, max)
+            if (l^.head < min) then
+                min <- head(l)
+            if (l^.head > max) then
+                max <- head(l)
+            
+{ SOAL NO. 6 }
+procedure listPlus(input l1,l2:List; output l3:List)
+    { Buatlah procedure listPlus yang menerima masukan dua buah list of integer l1 dan l2 
+        yang mungkin kosong dan memiliki dimensi yang sama serta menghasilkan sebuah list
+        baru yang memiliki dimensi yang sama dan berisi elemen-elemen yang merupakan 
+        penjumlahan dari elemen-elemen yang bersesuaian dari l1 dan l2. }
+    { I.S. l1, l2 terdefinisi dengan dimensi yang sama, mungkin kosong. }
+    { F.S. l3 berisi elemen-elemen yang merupakan penjumlahan elemen-elemen l1 dan l2 
+    pada posisi yang bersesuaian. }
+
+    { KAMUS LOKAL }
+
+    { ALGORITMA }
+        if (isEmpty(l1) and isEmpty(l2)) then
+            l3 <- Nil
+        else
+            l3^.head <- l1^.head + l2^.head
+            l3^.tail <- listPlus(l1^.tail, l2^.tail)

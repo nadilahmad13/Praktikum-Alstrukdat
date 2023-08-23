@@ -1,0 +1,70 @@
+function countPos(l : List) -> integer
+{ Menghasilkan banyaknya kemunculian bilangan positif (>0) pada l }
+
+{ KAMUS LOKAL }
+
+{ ALGORITMA }
+   if (isEmpty(l)) then
+      -> 0
+   else
+      if (l^.head > 0) then
+         -> 1 + countPos(l^.tail)
+      else
+         -> countPos(l^.tail);
+
+function sumPos (l:List) -> integer
+{ Menhasilkan penjumlahan semua elemen bilangan positif (>0) dari l. l kosong menghasilkan 0.}
+    
+{ KAMUS LOKAL }
+
+{ ALGORITMA }
+    if (isEmpty(l)) then
+        -> 0
+    else
+        if (l^.head > 0) then
+            -> l^.head + sumPos(l^.tail)
+        else
+            -> sumPos(l^.tail)
+
+function isMember(l:List, x:ElType) -> boolean
+{ Menghasilkan true jika x adalah anggota dari l, false jika tidak. }
+    
+{ KAMUS LOKAL }
+
+{ ALGORITMA }
+    if (isEmpty(l)) then
+        -> false
+    else
+        if (l^.head = x) then
+            -> true
+        else
+            -> isMember(l^.tail, x)
+
+function isEqual(l1,l2:List) -> boolean
+{ Menghasilkan true jika l1 dan l2 adalah list yang sama, false jika tidak }
+
+{ KAMUS LOKAL }
+
+{ ALGORITMA }
+    if (isEmpty(l1) and isEmpty(l2)) then
+        -> true
+    else
+        if (length(l1) != length(l2)) then
+            -> false
+        else
+            if (l1^.head = l2^.head) then
+                -> isEqual(l1^.tail, l2^.tail)
+            else
+                -> false
+
+procedure listPlus(l1,l2:List ; output l3:List)
+{ Menghasilkan l3 yang merupakan hasil penjumlahan l1 dan l2. l1 dan l2 harus memiliki panjang yang sama. }
+    
+{ KAMUS LOKAL }
+
+{ ALGORITMA }
+    if (isEmpty(l1) and isEmpty(l2)) then
+        -> l3 = Nil
+    else
+        l3^.head = l1^.head + l2^.head
+        l3^.tail = listPlus(l1^.tail, l2^.tail)

@@ -1,0 +1,96 @@
+{ DEKLARASI TIPE }
+type ElType : integer
+type Address : pointer to Node
+type Node : < info : ElType,
+              next : Address >
+type List : Address
+
+procedure deleteNeg (input/output l : list)
+{ Menghapus semua elemen bernilai negatif pada sebuah list of integer l.
+  List l boleh kosong dan setiap elemen yang dihapus harus dilakukan dealokasi.}
+
+{ ALTERNATIF 1 }
+{ KAMUS LOKAL }
+var
+   p, q     : address
+   idxNeg   : integer
+   val      : ElType
+
+{ ALGORITMA }
+    p <- l;
+    while (p != NIL) do
+        if (p^.info < 0) then
+            idxNeg <- indexOf(l, p^.info)
+            deleteAt(l,idxNeg,val)
+        p <- p^.next
+
+{ ALTERNATIF 2 }
+{ KAMUS LOKAL }
+    P, P1 : Address
+
+{ ALGORITMA }
+    P1 <- NIL
+    P <- l
+    while (P != Nil) do
+        if (P^.info < 0) then
+            if (P1 = NIL) then
+                l <- P^.next
+                dealokasi(P)
+                P <- l
+            else
+                P1^.next <- P^.next
+                dealokasi(P)
+                P <- P1^.next
+        else
+            P1 <- P
+            P <- P1^.next
+
+procedure copyPos(input l1 : List, output l2 : List)
+{ Menyalin semua elemen bernilai positif dari sebua list of integer l1 menjadi l2}
+
+{ ALTERNATIF 1 }
+{ KAMUS LOKAL }
+   p : address
+
+{ ALGORITMA }
+    if (l1 != NIL) then
+        p <- l1;
+        while (p != NIL) do
+            if (p^.info > 0) then
+                insertLast(l2, p^.info)
+            p <- p^.next
+
+
+procedure sortedInsert (input/output l : List, input x : ElType)
+{ Menambahkan sebuah elemen x pada sebuah list of integer l yang terurut menaik }
+    
+{ KAMUS LOKAL }
+   p : address;
+
+{ ALGORITMA }
+    if (l = NIL) then
+        inserFirst(l, x)
+    else if (l^.info > x) then
+        inserFirst(l, x)
+    else
+        p <- l
+        while (p^.next != NIL) AND (p^.next^.info <  x) do
+            p <- p^.next
+        insertAt(p,x)
+
+procedure updateList(input x,y : infotype, input/output l : list)
+{Menerima sebuah infotype x dan y dan sebuah list l dan kemudian mengganti elemen pertama l
+yang bernilai x dengan y jika x ada di l.}
+
+{ KAMUS LOKAL }``
+   p : address
+   flag : boolean
+
+{ ALGORITMA }
+    p <- l
+    flag <- false
+    while (p != NIL and not flag) do
+        if (p^.info = x) then
+            p^.info <- y
+            flag <- true
+        p <- p^.next

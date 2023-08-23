@@ -1,0 +1,64 @@
+===== BAGIAN I. ADT Matriks =====
+function IsSegitigaBawah (M : MATRIKS) → boolean
+{ Mengirimkan true jika M adalah matriks segitiga bawah, dengan Mij = 0
+  untuk semua i < j.
+  Prekondisi : M adalah matriks bujur sangkar (berukuran n x n) }
+
+KAMUS LOKAL
+    i, j : integer
+
+ALGORITMA
+    IsSegitigaBawah ← true
+    { ALTERNATIF 1 }
+    i ← 0
+    while (i < GetNBrsEff(M)) and (IsSegitigaBawah)
+        i ← i + 1
+        j ← i + 1
+        while (j < GetNKolEff(M)) and (IsSegitigaBawah)
+            j ← j + 1
+            if (Elmt(M, i, j) ≠ 0) then
+                IsSegitigaBawah ← false
+
+    { ALTERNATIF 2 }
+    i Traversal 0..GetNBrsEff(M)
+        j Traversal i+1..GetNKolEff(M)
+            if (GetElmt(M, i, j) ≠ 0) then
+                IsSegitigaBawah ← false
+
+    → IsSegitigaBawah
+
+procedure DetriMatriks (input M : MATRIKS, output Det : integer)
+{ Menghitung nilai determinan matriks segitiga M, dimana determinant
+  dihitung berdasarkan perkalian semua elemen diagonalnya.
+  I.S. Matriks M terdefinisi;
+  F.S. Det berisi nilai determinan matriks segitiga bawah M atau 0 jika
+       bukan matriks segitga bawah.}
+
+KAMUS LOKAL
+    Det, i : integer
+
+ALGORITMA
+    if (IsSegitigaBawah(M)) then
+        Det ← 1
+        i ← 1
+        i Traversal 0..GetNBrsEff(M)
+            Det ← Det * GetElmt(M, i, i)
+    else
+        Det ← 0
+    
+    → Det
+
+===== BAGIAN II. Mesin Kata dan ADT Stack =====
+procedure STARTTOKEN
+{ I.S. : CToken sembarang }
+{ F.S. : Jika CC = MARK, maka EndToken = true; }
+{        atau EndToken = false, CToken adlaah token yang sudah diakuisisil;
+         CC karakter pertama sesudah karakter terakhi yang diakuisisi.}
+
+KAMUS LOKAL
+    CToken : string
+    EndToken : boolean
+
+ALGORITMA
+    
+

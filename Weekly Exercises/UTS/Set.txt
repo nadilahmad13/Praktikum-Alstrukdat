@@ -1,0 +1,134 @@
+= = = = = = = SET = = = = = = =
+
+{ Definisi Fungsional }
+
+CreateSet   : → S               { Membuat sebuah set kosong }
+isEmpty     : S → boolean       { Tes terhadap S: true jika S kosong,
+                                  false jika S tidak kosong}
+length      : S → integer       { Mengembalikan banyaknya elemen S }
+add         : ElmtS x S -> S    { Menambahkan elemen ke dalam set }
+remove      : ElmtS x S -> S    { Menghapus elemen dari set }
+isIn        : ElmtS x S → boolean { Mengembalikan true jika elemen ada di S }
+isEqual     : S1 x S2 → boolean { Mengembalikan true jika S1 = S2 }
+union       : S1 x S2 → S       { Menghasilkan gabungan S1 dan S2 }
+intersection: S1 x S2 → S       { Menghasilkan irisan S1 dan S2 }
+setDifference: S1 x S2 → S      { Menghasilkan S1 dikurangi S2 }
+copy        : S → S             { Mengcopy set S ke set baru }
+isSubset    : S1 x S2 → boolean { Mengembalikan true jika S1 adalah subset 
+                                  dari S2 }
+            
+{ ADT SET }
+KAMUS UMUM
+constant CAPACTIY : integer = ... { Banyaknya elemen maksimum }
+type ElType : integer { elemen set }
+type Set :
+    < buffer : array [0..CAPACTIY-1] of ElType, { array penyimpan elemen set }
+      length : integer >                        { jumlah elemen set }
+
+= = = = = = = LATIHAN = = = = = = =
+Mengimplementasikan add, remove, isIn, dan union
+
+1. Terurut berdasarkan nilainya
+
+function add (val : ElmtS, S : Set) -> Set
+
+    KAMUS LOKAL
+        i,j : integer
+        found : boolean
+        temp : ElType
+    
+    ALGORITMA
+        { MENCARI NILAI YANG LEBIH KECIL DARI VAL }
+        i <- 0
+        found <- false
+        while (i < S.length and found = false) do
+            if (val < S.buffer[i])
+                found <- true
+            else
+                i <- i + 1
+        { i = S.length OR found = true }
+
+        { MENGGESER NILAI }
+        j <- S.length
+        while (j > i) do
+            S.buffer[j] <- S.buffer[j-1]
+            j <- j - 1
+        { j = i }
+
+        { MENAMBAHKAN NILAI }
+        S.buffer[i] <- val
+        S.length <- S.length + 1
+        
+        -> s
+
+function remove (val : ElmtS, S : Set) -> Set
+
+    KAMUS LOKAL
+        i,j : integer
+        found : boolean
+    
+    ALGORITMA
+        { MENCARI NILAI YANG SAMA DENGAN VAL }
+        i <- 0
+        found <- false
+        while (i < S.length and found = false) do
+            if (val = S.buffer[i])
+                found <- true
+            else
+                i <- i + 1
+        { i = S.length OR found = true }
+
+        { MENGGESER NILAI }
+        j <- i
+        while (j < S.length) do
+            S.buffer[j] <- S.buffer[j+1]
+            j <- j + 1
+        { j = S.length }
+
+        { MENGURANGI PANJANG }
+        S.length <- S.length - 1
+        
+        -> s
+
+function isIn (val : ElmtS, S : Set) -> boolean
+
+    KAMUS LOKAL
+        i : integer
+        found : boolean
+    
+    ALGORITMA
+        { MENCARI NILAI YANG SAMA DENGAN VAL }
+        i <- 0
+        found <- false
+        while (i < S.length and found = false) do
+            if (val = S.buffer[i])
+                found <- true
+            else
+                i <- i + 1
+        { i = S.length OR found = true }
+
+        -> found
+
+function union (S1,S2 : Set) -> Set
+    
+        KAMUS LOKAL
+            i,j,k : integer
+            US : Set
+        
+        ALGORITMA
+            { MENGKOPI SET }
+            US <- copy(S1)
+            US <- copy(S2)
+            
+            { MENGHAPUS ELEMEN YANG SAMA }
+            i <- 0
+            while (i < US.length) do
+                j <- i + 1
+                while (j < US.length) do
+                    if (US.buffer[i] = US.buffer[j])
+                        US <- remove(US.buffer[i],US)
+                    else
+                        j <- j + 1
+                i <- i + 1
+            
+            -> US

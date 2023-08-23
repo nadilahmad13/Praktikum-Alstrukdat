@@ -1,0 +1,187 @@
+{ Bagian I : List linier direpresentasi dengan pointer }
+constant Nil: ...
+type infotype: integer
+type ElmtList : < Info: infotype, Next: address >
+type address: pointer to ElmtList
+typeList: < First: address >
+
+{ *** SELEKTOR *** }
+{ Jika L: List dan P: address, maka realisasi: First(L) adlaah L.First;
+  Next(P) adalah P^.Next; Info(P) adalah P.Info }
+
+{ *** Predikat pemeriksaan *** }
+function IsEmpty(L: List): boolean
+{ Mengirim true jika list kosong }
+
+{ *** Konstruktor *** }
+procedure CreateEmpty(var L: List)
+{ I.S. L sembarang; F.S. Terbentuk list kosong }
+
+{ *** Manajemen Memori *** }
+procedure Alokasi(X: infotype)
+{ Mengirimkan address hasil alokasi sebuah elemen }
+{ Jika alokasi berhasil, maka address tidak nil, dan misalnya menghasilkan P,
+  maka Info(P)=X, Next(P)=Nil }
+{ Jika alokasi gagal, mengirimkan Nil }
+
+procedure Dealokasi(P: address)
+{ I.S. P adalah hasil alokasi, P <> Nil }
+{ F.S. P dikembalikan ke sistem }
+{ Melakukan dealokasi/pengembalian address P }
+
+{ *** Operasi Terhadap List *** }
+procedure InsertLast (input/output L: List, input P: address)
+{ I.S. L mungkin kosong; P sudah dialokasi }
+{ F.S. P ditambahkan sebagai elemen terakhir yang baru }
+
+
+function SearchX (L: List, X: infotype)-> boolean
+{ Mengirimkan true jika ada elemen list yang beralamat P, dengan Info(P)=X }
+{ Jika tidak ada, mengirimkan false }
+
+{ KAMUS LOKAL }
+   p    : address
+   found: boolean
+
+{ ALGORITMA }
+    p <- First(L)
+    found <- false
+    while (p != Nil) and (not found) do
+        if (Info(p) = X) then
+            found <- true
+        else
+            p <- Next(p)
+    -> found
+
+
+function SortedIntersect(input L1, L2: List, output L3: List)
+{ I.S. L1, L2 berupa list terurut membesar, berelemen unik, dan mungkin kosong.
+  L3 sembarang }
+{ F.S. L3 berisi hasil intersek L1 dan L2, list terurut membesar. Jika ada alokasi elemen yang
+    gagal, maka L3 berupa list kosong. }
+
+{ KAMUS LOKAL }
+    p   : address
+
+{ ALGORITMA }
+    allocated <- true
+    CreateEmpty(L3)
+    p <- First(L1)
+    while (p != Nil) and (allocated) do
+        if (SearchX(L2, Info(p))) then
+            Alokasi(Info(p))
+            if (p != Nil) then { Jika Alokasi Berhasil }
+                InsertLast(L3, p)
+            else           { Jika Alokasi Gagal }
+                allocated <- false
+                CreateEmpty(L3)
+        p <- Next(p)
+
+function SortedMerge (input/output L1: List, input L2: List, output status: boolean)
+{ I.S. L1, L2 terdefinisi dan tidak kosong, dengan L1 elemennya terurut membesar
+       dan unik, L2 juga berelemen unik, akan tetapi belum tentu terurut.}
+{ F.S. L1 sudah bertambah dengan elemen dari L2, tetap berelemen unik dan terurut membesar.
+       Jika ada alokasi elemen yang gagal, maka L1 berupa list tepat sebelum terjadi kegagaaln
+       alokasi, dan status = false. Jika semua alokasi berhasil, maka status = true. }
+
+{ KAMUS LOKAL }
+    p, q: address
+
+{ ALGORITMA }
+    status <- true
+    p <- First(L2)
+    while (p != Nil) and (status) do
+        if (not SearchX(L1, Info(p))) then
+            Alokasi(Info(p))
+            if (p != Nil) then { Jika Alokasi Berhasil }
+                { Insert sesuai dengan urutan, yaitu membesar nilainya }
+                q <- First(L1)
+                while (Next(q) != Nil) and (Info(Next(q)) < Info(p)) do
+                    q <- Next(q)
+                Next(p) <- Next(q)
+                Next(q) <- p
+            else           { Jika Alokasi Gagal }
+                status <- false
+        p <- Next(p)
+
+{ Bagian II : Sorting Hat }
+type infotype   : integer
+type ElmtList   : < Info: infotype, 
+                  Next: address >
+type address    : pointer to ElmtList
+type Gryffindor : < First: address >
+type Hufflepuff : < First: address >
+type Ravenclaw  : < First: address >
+type Slytherin  : < First: address >
+
+{ List dari setiap House }
+type ListOfHouses : < Gryffindor: Gryffindor,
+                    Hufflepuff: Hufflepuff,
+                    Ravenclaw: Ravenclaw,
+                    Slytherin: Slytherin >
+
+{ *** SELEKTOR *** }
+{ Jika L: ListOfHouses, H: House, dan P: address, maka realisasi:
+  First(L.H) adlaah L.H.First;
+  Next(P) adalah P^.Next; Info(P) adalah P.Info }
+
+{ *** Konstruktor *** }
+procedure CreateEmpty(var L: ListOfHouses)
+{ I.S. L sembarang; F.S. Terbentuk list kosong }
+
+{ *** Operasi Terhadap List *** }
+procedure SortedInsert (input/output L: ListOfHouses, input H: House, input P: address)
+{ I.S. L mungkin kosong; P sudah dialokasi }
+{ F.S. P ditambahkan sebagai elemen baru yang terurut dalam L }
+    { KAMUS LOKAL }
+        q: address
+    
+    { ALGORITMA }
+        q <- First(L.H)
+        while (Next(q) != Nil) and (Info(Next(q)) < Info(P)) do
+            q <- Next(q)
+        Next(P) <- Next(q)
+        Next(q) <- P
+
+{ *** Sorting Hat *** }
+procedure SortingHat (input/output L: ListOfHouses, input P: address)
+{ I.S. L sembarang, P sudah dialokasi }
+{ F.S. P ditambahkan ke dalam salah satu list di L sesuai dengan nilai Info(P) }
+
+{ KAMUS LOKAL }
+    house: House
+
+{ ALGORITMA }
+    { Gryffindor adalah ID yang habis dibagi sembilan dan bukan kelipatan dua }
+    if (Info(P) % 9 = 0) and (Info(P) % 2 != 0) then
+        house <- Gryffindor
+    { Hufflepuff adalah ID yang habis dibagi dua dan bukan kelipatan tujuh }
+    else if (Info(P) % 2 = 0) and (Info(P) % 7 != 0) then
+        house <- Hufflepuff
+    { Ravenclaw adalah ID yang tidak habis dibagi tujuh dan kelipatan dua }
+    else if (Info(P) % 7 != 0) and (Info(P) % 2 = 0) then
+        house <- Ravenclaw
+    { Slytherin adalah ID yang habis dibagi dua dan bukan kelipatan sembilan }
+    else if (Info(P) % 2 = 0) and (Info(P) % 9 != 0) then
+        house <- Slytherin
+    SortedInsert(L, house, P)
+
+{ Program utama untuk mengalokasikan anak ke asrama, menempatkan anak di jajaran 
+  kursi makan sesuai asramanya, dan mempersilakan anak untuk masuk ke asrama masing-masing
+  secara bergiliran (dengan menampilkan seluruh nama anak yang ke luar makan sesuai 
+  asramanya). Asumsi: jumlah anak 100 orang dan id digenerate secara random menggunakan
+  fungsi randomize dalam rentang 1 sampai dengan 100 tanpa menuliskan ulang spesifikasi
+  yang telah Anda buat di soal sebelumnya. Primitif-primitf yang ada pada ADT bisa 
+  langsung digunakan}
+
+{ KAMUS LOKAL }
+    L: ListOfHouses
+    P: address
+    i: integer
+
+{ ALGORITMA }
+    CreateEmpty(L)
+    i Traversal 0..100
+        Alokasi(random(100))
+        if (p != Nil) then
+            SortingHat(L, p)

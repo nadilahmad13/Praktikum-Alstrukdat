@@ -1,0 +1,144 @@
+function isSimetris (l: List) → boolean
+    { Menghasilkan true jika List l simetrik. }
+    { List disebut simetrik jika:
+    - elemen pertama = elemen terakhir,
+    - elemen kedua = elemen sebelum terakhir,
+    - dan seterusnya.
+    List kosong adalah List simetris }
+
+    { KAMUS LOKAL }
+        i,j: integer
+        simetris: boolean
+
+    { ALGORITMA }
+    { Inisialisasi Variabel }
+    i ← 0
+    j ← length(l)-1
+    simetris ← true
+
+    { Proses }
+    if (isEmpty(l)) then
+        simetris ← true
+    else then
+        while (i < j and simetris) do
+            if ( getElmt(l,i) ≠ getElmt(l,j) ) then
+                simetris ← false
+            i ← i + 1
+            j ← j - 1
+
+    -> simetris
+
+function plusTab(l1,l2 : List) -> List
+    { Prekondisi: l1 dan l2 berukuran sama dan tidak kosong. }
+    { Mengirimkan l1+l2, yaitu penjumlahan setiap elemen l1 dan l2
+    pada indeks yang sama (seperti penjumlahan vektor dalam matematika). }
+    
+    { KAMUS LOKAL }
+        i: integer
+        l3: array of integer [0..length(l1)-1]
+
+    { ALGORITMA }
+    { Inisialisasi Variabel }
+    i ← 0
+    CreateList(l3)
+    
+    { Proses }
+    i traversal [0..length(l1)-1]
+        insertLast(l3, getElmt(li,i) + getElmt(l2,i))
+    -> (l3)
+
+function countOccurence(l: List, x: ElType) → integer
+    { Menghasilkan berapa banyak kemunculan elemen bernilai x di List l. } { Jika l kosong, menghasilkan 0. }
+
+    { KAMUS LOKAL }
+        i, counter: integer
+
+    { ALGORITMA }
+    { Inisialisasi Variabel }
+    i ← 0
+    count ← 0
+
+    { Proses }
+    i traversal[0..length(l)-1]
+        if (getElmt(l,i) = x) then
+            count ← count + 1
+    -> (count)
+
+function isEqual (l1,l2:List) → boolean
+    { Mengirimkan true jika l1 setara dengan l2, yaitu jika ukuran
+    l1 sama dengan ukuran l2 dan semua elemen l1 dan l2 pada indeks
+    yang sama bernilai sama; L1 dan L2 tidak kosong. }
+
+    { KAMUS LOKAL }
+        i: integer
+
+    { ALGORITMA }
+    { Inisialisasi Variabel }
+    isEq ← true
+    i <- 0
+
+    { Proses }
+    if (length(l1) ≠ length(l2)) then
+        isEq <- false
+    
+    else then
+        while (i < length(l) and isEq) do
+            if ((getElmt(l1,i) ≠ getElmt(l2,i)) then
+                isEq ← false
+
+    -> isEq
+
+function indexOf (l:List, x:ElType) → IdxType
+    { Mencari apakah ada elemen List l yang bernilai x. }
+    { Jika ada, menghasilkan indeks i terkecil, di mana elemen l ke-i = x.
+    Jika tidak ada, mengirimkan indeks tak terdefinisi (idxUndef).
+    Jika list kosong, menghasilkan indeks tak terdefinisi (idxUndef). }
+    { Memakai skema searching tanpa boolean. }
+
+    { KAMUS LOKAL }
+        i: integer
+
+    { ALGORITMA }
+    { Inisialisasi Variabel }
+    i ← 0
+
+    { Proses }
+    while (i < length(l)) do
+        if (getElmt(l,i) = x) then
+            -> (i)
+        i ← i + 1
+
+    -> (idxUndef)
+
+procedure insertUnique (input/output l:List, input x:ElType)
+    { Menambahkan x sebagai elemen terakhir list l,
+    pada list dengan elemen unik. }
+    { I.S. List l boleh kosong, tetapi tidak penuh
+    dan semua elemennya bernilai unik, tidak terurut.
+    F.S. Menambahkan x sebagai elemen terakhir l
+    jika belum ada elemen yang bernilai x.
+    Jika sudah ada elemen list yang bernilai x
+    maka I.S. = F.S. dan dituliskan pesan
+    “nilai sudah ada”. }
+    { Proses : Cek apakah X ada dengan sequential search
+    dengan sentinel, kemudian tambahkan jika belum ada. }
+
+    { KAMUS LOKAL }
+        i: integer
+        found: boolean
+
+    { ALGORITMA }
+    { Inisialisasi Variabel }
+    i ← 0
+    found ← false
+
+    { Proses }
+    while (i < length(l) and not found) do
+        if (getElmt(l,i) = x) then
+            found ← true
+        i ← i + 1
+
+    if (found) then
+        output(“nilai sudah ada”)
+    else then
+        insertLast(l,x)

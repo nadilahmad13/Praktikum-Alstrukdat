@@ -1,0 +1,27 @@
+= = = = = = = MAP = = = = = = =
+
+{ DEFINISI FUNGSIONAL }
+CreateMap   : -> M              { Membuat map kosong }
+isEmpty     : M -> boolean      { Tes terhadap M : true jika M kosong,
+                                  false jika M tidak kosong }
+set         : K x V x M -> M    { Menambahkan pasangan (K,V) ke M jika
+                                  belum ada elemen dengan nilai key = K pada M,
+                                  atau mengubah nilai value dari pasangan
+                                  dengan nilai key = K menjadi V }
+unset       : K x M -> M        { Menghapus pasangan dengan nilai key = K
+                                  dari M }
+find        : K x M -> V        { Mengembalikan nilai value dari pasangan
+                                  dengan nilai key = K }
+
+{ ADT MAP }
+KAMUS UMUM
+constant CAPACTIY   : integer   = ... { Banyaknya elemen maksimum }
+constant VAL_UNDEF  : ElType    = ...
+
+type KeyType : ...
+type ElType  : ...
+type MapEntry : < key : KeyType , value : ElType > { elemen map }
+
+type Map:
+    < buffer : array [0..CAPACTIY-1] of MapEntry, { array penyimpanan elemen map }
+      length : integer >                          { jumlah elemen map }

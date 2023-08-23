@@ -1,0 +1,387 @@
+{ PREDIKAT PENTING }
+
+function isTreeEmpty(p : BinTree ) -> boolean
+    { Mengirimkan true jika p adalah pohon biner yang kosong }
+    { KAMUS LOKAL }
+        -
+    { ALGORITMA }
+        -> (p = Nil)
+
+function isOneElmt (p : BinTree ) -> boolean
+    { Mengirimkan true jika p tidak kosong dan hanya terdiri atas 1 elemen }
+    { KAMUS LOKAL }
+        -
+    { ALGORITMA }
+        if not(isTreeEmpty(p))
+            -> ((p^.left = Nil) and (p^.right = Nil))
+        else
+            -> false
+
+function isUnerLeft (p: BinTree) → boolean
+    { Mengirimkan true jika pohon biner tidak kosong, p adalah pohon unerleft: 
+      hanya mempunyai subpohon kiri }
+
+function isUnerRight (p: BinTree) → boolean
+    { Mengirimkan true jika pohon biner tidak kosong, p adalah pohon unerright: 
+      hanya mempunyai subpohon kanan }
+
+function isBiner (p: BinTree) → boolean
+    { Mengirimkan true jika pohon biner tidak kosong, p adalah pohon biner: 
+    mempunyai subpohon kiri dan subpohon kanan }
+
+procedure preOrder (input p: BinTree) 
+    { I.S. Pohon p terdefinisi }
+    { F.S. Semua node pohon p sudah diproses secara pre-order: 
+    akar, kiri, kanan }
+    { Basis Pohon kosong tidak ada yang diproses }
+    { Rekurens Proses akar p; 
+    Proses subpohon kiri p secara pre-order
+    Proses subpohon kanan p secara pre-order }
+
+    {KAMUS LOKAL}
+        -
+
+    {ALGORITMA}
+        if isTreeEmpty(p) then { Basis-0 }
+            { do nothing }
+        else { Rekurens, tidak kosong }
+            proses(p)
+            preOrder(p↑.left)
+            preOrder(p↑.right)
+
+procedure inOrder (input p: BinTree) 
+    { I.S. Pohon p terdefinisi }
+    { F.S. Semua node pohon p sudah diproses secara InOrder: 
+    kiri, akar, kanan }
+    { Basis Pohon kosong tidak ada yang diproses }
+    { Rekurens Proses subpohon kiri p secara in-order
+    Proses akar p; 
+    Proses subpohon kanan p secara in-order }
+
+    { KAMUS LOKAL }
+        -
+
+    { ALGORITMA }
+        if isTreeEmpty(p) then { Basis-0 }
+            { do nothing }
+        else { Rekurens, tidak kosong }
+            inOrder(p↑.left)
+            proses(p)
+            inOrder(p↑.right)
+
+procedure postOrder (input p: BinTree) 
+    { I.S. Pohon p terdefinisi }
+    { F.S. Semua node pohon p sudah diproses secara postOrder: 
+    kiri, kanan, akar }
+    { Basis Pohon kosong tidak ada yang diproses }
+    { Rekurens Proses subpohon kiri p secara post-order
+    Proses subpohon kanan p secara post-order
+    Proses akar p; }
+
+    { KAMUS LOKAL } 
+        -
+        
+    { ALGORITMA }
+        if isTreeEmpty(p) then { Basis-0 }
+            { do nothing }
+        else { Rekurens, tidak kosong }
+            postOrder(p↑.left)
+            postOrder(p↑.right)
+            proses(p)
+
+{ LATIHAN 1 }
+function search (P : BinTree, X : ElType) -> boolean
+    { Mengirimkan true jika ada node dari P yang bernilai X }
+
+    { KAMUS LOKAL }
+        -
+        
+    { ALGORITMA }
+        if isTreeEmpty(P) then { Basis-0 }
+            -> false
+        else { Rekurens, tidak kosong }
+            if (P^.info = X) then
+                -> true
+            else
+                -> (search(P^.left, X) or search(P^.right, X))
+
+function isSkewLeft (P: BinTree) → boolean
+    { Mengirimkan true jika P adalah pohon condong kiri }
+    
+    { KAMUS LOKAL }
+        -
+        
+    { ALGORITMA }
+    if (isTreeEmpty(P)) then
+        -> true
+    else
+        depend on (P)
+            isBiner(P) : -> false
+            isUnerLeft(P) : isSkewLeft(P↑.left)
+            isUnerRight(P) : -> false
+
+function isSkewRight (P: BinTree) → boolean
+    { Mengirimkan true jika P adalah pohon condong kanan }
+
+    { KAMUS LOKAL }
+        -
+    
+    { ALGORITMA }
+    if (isTreeEmpty(P)) then
+        -> true
+    else
+        depend on (P)
+            isBiner(P) : -> false
+            isUnerLeft(P) : -> false
+            isUnerRight(P) : isSkewRight(P↑.right)
+
+function level (P: BinTree, X: ElType) → integer
+    { Mengirimkan level dari node X yang merupakan salah satu daun dari pohon biner P. 
+    Akar(P) level-nya adalah 1. Pohon P tidak kosong dan elemen-elemennya unik. }
+
+    { KAMUS LOKAL }
+        -
+
+    { ALGORITMA }
+        if isTreeEmpty(P) then
+            -> 0
+        else if isOneElmt(P) then
+            if (P^.info = X) then
+                -> 1
+            else
+                -> 0
+        else
+            if (search(P^.left, X)) then
+                -> (level(P^.left, X) + 1)
+            else if (search(P^.right, X)) then
+                -> (level(P^.right, X) + 1)
+            else
+                -> 0
+
+procedure addDaun (input/Output P: BinTree, input X, Y: ElType, input Kiri: boolean)
+    { I.S. P tidak kosong, X adalah daun Pohon Biner P }
+    { F.S. P bertambah simpulnya, dengan Y sebagai anak kiri X (jika Kiri), atau sebagai 
+    anak Kanan X (jika not Kiri). Jika ada lebih dari satu daun bernilai X, Y 
+    ditambahkan pada daun paling kiri. }
+
+    { KAMUS LOKAL }
+        -
+    
+    { ALGORITMA }
+        if isTreeEmpty(P) then
+            { do nothing }
+        else if isOneElmt(P) then
+            if (P^.info = X) then
+                if (Kiri) then
+                    P^.left <- newTreeNode(Y)
+                else
+                    P^.right <- newTreeNode(Y)
+            else
+                { do nothing }
+        else
+            # if (P^.info = X) then
+            #     if (Kiri) then
+            #         P^.left <- newTreeNode(Y)
+            #     else
+            #         P^.right <- newTreeNode(Y)
+            else
+                addDaun(P^.left, X, Y, Kiri)
+                addDaun(P^.right, X, Y, Kiri)
+            
+
+
+procedure delDaun (input/output P: BinTree, input X: ElType)
+    { I.S. P tidak kosong, minimum 1 daun bernilai X }
+    { F.S. Semua daun yang bernilai X dihapus dari P }
+
+    { KAMUS LOKAL }
+        -
+    
+    { ALGORITMA }
+        if isTreeEmpty(P) then
+            { do nothing }
+        else
+            if isOneElmt(P) then
+                if (P^.info = X) then
+                    deallocTreeNode(P)
+            else
+                delDaun(P^.left, X)
+                delDaun(P^.right, X)
+
+
+{CATATAN: gunakan newListNode(ElType) untuk mengalokasi elemen list}     
+
+function makeListDaun (P: BinTree) → ListOfNode
+    { Jika P adalah pohon kosong, maka menghasilkan list kosong. }
+    { Jika P bukan pohon kosong: menghasilkan list yang elemennya adalah semua daun 
+    pohon P. Diasumsikan alokasi selalu berhasil. }
+
+    { KAMUS LOKAL }
+        -
+    
+    { ALGORITMA }
+        if isTreeEmpty(P) then
+            -> newListNode(nil)
+        else if isOneElmt(P) then
+            -> newListNode(P)
+        else
+            -> concat(makeListDaun(P^.left), makeListDaun(P^.right))
+
+function makeListLevel (P: BinTree, N: integer) → ListOfNode
+    { Jika P adalah pohon kosong, maka menghasilkan list kosong. }
+    { Jika P bukan pohon kosong: menghasilkan list yang elemennya adalah semua elemen 
+    pohon P yang levelnya=N, jika semua alokasi berhasil. Diasumsikan alokasi selalu
+    berhasil. }
+
+    { KAMUS LOKAL }
+        -
+    
+    { ALGORITMA }
+        if isTreeEmpty(P) then
+            -> newListNode(nil)
+        else if isOneElmt(P) then
+            if (level(P, P^.info) = N) then
+                -> newListNode(P)
+            else
+                -> newListNode(nil)
+        else
+            -> concat(makeListLevel(P^.left, N), makeListLevel(P^.right, N))
+
+{ BALANCED TREE }
+function buildBalancedTree (n: integer) → BinTree
+    { Menghasilkan sebuah balanced tree }
+    { Basis: n = 0: Pohon kosong }
+    { Rekurens: n>0: partisi banyaknya node anak kiri dan kanan, 
+    lakukan proses yang sama }
+
+    { KAMUS LOKAL }
+        p: Address; l, r: BinTree; x: ElType
+        nL, nR: integer
+    
+    { ALGORITMA }
+        if (n = 0) then { Basis-0 }
+            → NIL
+        else { Rekurens }
+            { bentuk akar }
+            input(x) { mengisi nilai akar }
+            p ← newTreeNode(x)
+
+        if (p != NIL) then
+            { Partisi sisa node sebagai anak kiri dan anak kanan }
+            nL ← n div 2 
+            nR ← n - nL - 1
+            l ← buildBalancedTree(nl); r ← buildBalancedTree(nr)
+            p↑.left ← l
+            p↑.right ← r
+            → p
+
+{ BINARY SEARCH TREE }
+procedure insSearchTree(input x: ElType, input/output p: BinTree) 
+    { Menambahkan sebuah node x ke pohon biner pencarian p }
+    { ElType terdiri dari key dan count. Key menunjukkan nilai unik, dan count berapa kali muncul }
+    { Basis: Pohon kosong }
+    { Rekurens: Jika pohon tidak kosong, insert ke anak kiri jika nilai < p↑.info.key }
+    { Atau insert ke anak kanan jika nilai > p↑.info.key }
+    { Perhatikan bahwa insert selalu menjadi daun terkiri/terkanan dari subpohon }
+
+    { KAMUS LOKAL }
+        -
+
+    { ALGORITMA }
+        if (isTreeEmpty(p)) then { Basis: buat hanya akar }
+            CreateTree(x,NIL,NIL,p)
+        else { Rekurens }
+            depend on x, p↑.info.key
+            x.key = p↑.info.key : p↑.info.count ← p↑.info.count + 1
+            x.key < p↑.info.key : insSearchTree(x, p↑.left)
+            x.key > p↑.info.key : insSearchTree(x, p↑.right)
+
+procedure delBTree (input/output p: BinTree, input x: ElType) 
+    { Menghapus simpul bernilai p↑.info.key = x.key, asumsi: x.key pasti ada di p}
+    { ElType terdiri dari key dan count. Key menunjukkan nilai unik, dan count berapa kali 
+    muncul }
+    { Basis: ? ; Rekurens: ? }
+
+    { KAMUS LOKAL }
+    q: Address
+procedure delNode (input/output p: BinTree)
+{ … }
+    { ALGORITMA }
+        depend on x, p↑.info.key
+        x.key < p↑.info.key : delBTree(p↑.left, x)
+        x.key > p↑.info.key : delBTree(p↑.right, x)
+        x.key = p↑.info.key : { Delete simpul ini }
+            q ← p
+            depend on q
+                isOneElmt(q) : p ← NIL
+                isUnerLeft(q) : p ← q↑.left
+                isUnerRight(q): p ← q↑.right
+                isBiner(q) : delNode(q↑.left)
+                deallocTreeNode(q)x
+
+procedure delNode (input/output p: BinTree) 
+    { I.S. p adalah pohon biner tidak kosong }
+    { F.S. q berisi salinan nilai daun terkanan }
+    { Proses: }
+    { Memakai nilai q yang global}
+    { Traversal sampai NODE terkanan, copy nilai NODE terkanan p, 
+    salin nilai ke q semula }
+    { q adalah NODE TERKANAN yang akan dihapus }
+    
+    { KAMUS LOKAL }
+        -
+
+    { ALGORITMA }
+        depend on p
+            p↑.right != NIL: delNode(p↑.right)
+            p↑.right = NIL: { p anak terkanan }
+                q↑.info.key ← p↑.info.key { salin info p ke q }
+                q↑.info.count ← p↑.info.count
+                q ← p { q: yang akan dihapus }
+                p ← p↑.left { pastikan anak kiri “naik”, jika ada }
+
+function bSearch (p: BinTree, x: ElType) → boolean
+    { Mengirimkan true jika ada node dari p (BST) yang bernilai x }
+
+    { KAMUS LOKAL }
+        -
+
+    { ALGORITMA }
+        if (isTreeEmpty(p)) then { Basis }
+            → false
+        else { Rekurens }
+            depend on x, p↑.info.key
+                x.key = p↑.info.key : → true
+                x.key < p↑.info.key : bSearch(p↑.left, x)
+                x.key > p↑.info.key : bSearch(p↑.info.right, x)
+
+function isBTree (p: BinTree) → boolean
+    { Mengirimkan true jika p adalah balanced tree. Asumsi: p tidak kosong }
+    
+    { KAMUS LOKAL }
+        -
+
+    { ALGORITMA }
+        if (isTreeOneElmt(p)) then { Basis }
+            → true
+        else { Rekurens }
+            depend on p↑.left, p↑.right
+                isBTree(p↑.left) and isBTree(p↑.right) and (height(p↑.left) = height(p↑.right)) : → true
+                otherwise : → false
+
+
+function buildBST (infos: array [0..99] of integer, nEff: integer) → BinTree
+    { Mengirimkan BST yang semua elemennya ada di infos (tidak terurut dan tidak unik). 
+    Infos selalu diisi dari 1. nEff adalah jumlah elemen infos yang terdefinisi, 0 jika
+    kosong. }
+
+    { KAMUS LOKAL }
+        -
+
+    { ALGORITMA }
+        if (nEff = 0) then { Basis }
+            → NIL
+        else { Rekurens }
+            p ← buildBST(infos, nEff-1)
+            insSearchTree(infos[nEff], p)
+            → p

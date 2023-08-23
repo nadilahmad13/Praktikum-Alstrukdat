@@ -1,0 +1,344 @@
+{ LIST REKURSIF }
+constant Nil: ...
+type infotype: integer
+type ElmtList: < Info: infotype, Next: address >
+type address: pointer to ElmtList
+type List: address { alamat elemen pertama list }
+
+function IsMultiplied (L1, L2: List, N: integer) → boolean
+    { I.S. List L1, L2 terdefinisi, memiliki jumlah elemen yang sama dan mungkin kosong.
+    N terdefinisi.
+
+    F.S. Mengembalikan nilai true jika semua elemen L1 dikalikan dengan N, hasilnya
+    akan sama dengan L2, dan mengembalikan false jika tidak. Contoh: L1 = 2->1->4,
+    L2 = 6->3->12 dan N = 3, akan mengambalikan nilai true. Untuk kasus list
+    kosong, akan mengembalikan true.}
+
+    { KAMUS LOKAL }
+        -
+    
+    { ALGORITMA }
+        if (isEmpty(L1)) then
+            -> true
+        else
+            -> ((Info(L1) * N) = Info(L2)) and (isMultiplied(Next(L1),Next(L2),N))
+    
+procedure PrintAlternate (input L: List, input isOdd: boolean)
+    { I.S. List L terdefinisi dan mungkin kosong, isOdd terdefinisi.
+    F.S. Setiap elemen urutan ganjil dari list L tercetak jika isOdd bernilai true,
+
+    atau elemen urutan genap akan tercetak jika isOdd bernilai false. Sebagai
+    contoh, jika list L berisi nilai (2,4,3,2,8) dan isOdd = true, maka yang
+    tercetak adalah 2, 3 dan 8. Begitu pula sebaliknya, jika isOdd = false, yang
+    tercetak adalah 4 dan 2.}    
+
+    { KAMUS LOKAL }
+        -
+    
+    { ALGORITMA }
+        if(!isEmpty(L)) then
+            if (length(L) % 2 != 0) and (isOdd) then
+                output(Info(L))
+                PrintAlternate(Next(L),isOdd)
+            else if (length(L) % 2 == 0) and (!isOdd) then
+                output(Info(L))
+                PrintAlternate(Next(L),isOdd)
+            else
+                PrintAlternate(Next(L),isOdd)
+
+procedure DeleteKth (input/output L: List, input K: integer)
+    { I.S. L terdefinisi dan mungkin kosong. K berupa integer dengan rentang nilai 1
+    hingga banyaknya elemen dari list L untuk L tidak kosong, dan K bisa
+    terdefinisi sembarang jika L kosong.
+    F.S. Elemen ke-K dari list L terhapus list L.}
+
+    { KAMUS LOKAL }
+        -
+    
+    { ALGORITMA }
+        if (K == 1) then
+            L <- Next(L)
+        else
+            DeleteKth(Next(L),K-1)
+
+            
+{ ADT Pohon Biner Terurut (BST) dengan elemen unik }
+    { Pohon Biner dengan representasi pointer }
+    constant Nil: ... ( terdefinisi )
+    type Infotype: <Value: integer, Count: integer>
+    type Node: <Info: Infotype, Left: BinTree, Right: BinTree>
+    type adrNode: pointer to Node
+    type BinTree: adrNode
+    { Selektor: Jika P adalah BinTree:
+
+    Value(P) untuk mengakses bagian P↑.Info.Value;
+    Count(P) untuk mengakses bagian P↑.Info.Count;
+    Left(P) untuk mengakses bagian P↑.Left;
+    Right(P) untuk mengakses bagian P↑.Right }
+
+    {*** Konstruktor ***}
+    function MakeTree (X: integer) → BinTree
+    { Mengirimkan sebuah pohon biner, misalnya P. Value(P)=X, Count(P)=1,
+    Left(P)=Right(P)=Nil. }
+    { Jika alokasi gagal, menghasilkan pohon kosong }
+
+
+function SearchLessThen (P: BinTree, X: integer) → boolean
+    { Mengirimkan true jika ada Value pada pohon P yang nilainya kurang dari X; false
+    jika tidak ada }
+
+    { KAMUS LOKAL }
+        -
+    { ALGORITMA }
+    if (isTreeEmpty(P)) then
+        -> false
+    else
+        -> (Value(P) = X) or (SearchLessThen((Left(P)),X)) or (SearchLessThen((Right(P)),X))
+
+
+function SumAllValue (P: BinTree) → integer
+    { Mengirimkan jumlah total seluruh Value pada pohon P; jika Count(pt) > 1 maka
+    dihitung sebesar Value (pt) dikali Count(pt) }
+
+    { KAMUS LOKAL }
+        -
+    { ALGORTIMA }
+        if (isTreeEmpty(P)) then
+            -> 0
+        else
+            -> (Value(P) * Count(P)) + sumAllValue(LEFT(P)) + sumAllValue(RIGHT(P))
+
+function MaxOccurence (P: BinTree) → infotype
+    { Mengirimkan alamat node pada pohon P yang Value-nya muncul paling banyak (Count-nya
+    terbanyak); jika ada lebih dari satu node yang dengan Count tertinggi, kirimkan
+    alamat node dengan Value tertingi; pohon tidak kosong }
+
+    { KAMUS LOKAL }
+        N1, N2 : Infotype    
+
+    { ALGORITMA }
+        if (isTreeEmpty(P)) then
+            -> P
+        else
+            N1 <- MaxOccurence(LEFT(P))
+            N2 <- MaxOccurence(RIGHT(P))
+            if (Count(N1) > Count(N2)) then
+                -> N1
+            else if (Count(N1) < Count(N2)) then
+                -> N2
+            else
+                if (Value(N1) > Value(N2)) then
+                    -> N1
+                else
+                    -> N2
+
+{ GRAF BERARAH }
+constant Nil: ...
+type addrNode: pointer to Node
+type addrEdge: ponter to Edge
+type Node: < Id: integer, { identitas Node }
+             Next: addrNode > { alamat Node berikutnya }
+type Edge: < Source: addrNode, Target: addrNode, { alamat Node asal & tujuan }
+Next: addrEdge > { alamat Edge berikutnya }
+type Graph: < FirstNode: addrNode, { alamat Node pertama }
+              FirstEdge: addrEdge > { alamat Edge pertama }
+
+{ Selektor untuk Graph G, Node N, dan Edge E:
+- Id(N) dan Next(N) adalah N.Id dan N.Next
+
+- Source(E), Target(E), dan Next(E) adalah
+  E.Source, E.Target, dan E.Next
+- FirstNode(G) adalah G.FirstNode
+- FirstEdge(G) adalah G.FirstEdge 
+}
+
+function SearchEdge(G: Graph, s, t: integer) -> addrEdge
+    { Mengembalikan address edge yang menyimpan info edge dari
+        node ber-id s ke node ber-id t jika sudah ada pada Graph G,
+        Nil jika belum. Perhatikan: s & t adalah id Node, bukan
+        address Node. }
+
+    { KAMUS LOKAL }
+        addrS, addrT    : addrNode
+
+    { ALGORITMA }
+        { Mencari address dari s dan t}
+        addrS <- SearchNode(G,s)
+        addrT <- SearchNode(G,t)
+
+        fe = FirstEdge(G)
+        found <- false
+
+        { Looping untuk mencari yang source dan target sesuai s dan t}
+        while (fe != NIL and not found) do
+            if (Source(fe) = addrS) and (Target(fe) = addrT) then
+                found -> true
+            else
+                fe <- Next(fe)
+        -> fe
+
+procedure InsertEdge(input/output G: Graph, input s, t: integer)
+    { Menambahkan edge dari s menuju t ke dalam G }
+    { I.S. G, s, dan t terdefinisi. }
+    { F.S. Jika belum ada edge (s,t) di G, maka tambahkan edge
+    (s,t) ke G. Jika node s atau t belum ada pada G,
+    tambahkan node tersebut dahulu. Jika sudah ada edge
+    (s,t) di G, maka G tetap. Perhatikan: s & t adalah id Node,
+    bukan address Node. }
+
+    { KAMUS LOKAL }
+        addrS, addrT    : addrNode
+        newEdge         : addrEdge
+
+    { ALGORITMA }
+        { Cek apakah s dan t ada pada graf }
+        addrS <- SearchNode(G,s)
+        addrT <- SearchNode(G,t)
+
+        { Alokasi node jika s dan t tidak ada pada graf}
+        if (addrS = NIL) then
+            addrS <- AlokNode(s)
+        if (addrT = NIL) then
+            addrT <- AlokNode(t)
+
+        { ALOKASI EDGE BARU }
+        newEdge <- AlokEdge(addrS, addrT)
+
+        { MASUKKAN KE DALAM GRAF(insert last) }
+        fe <- FirstEdge(G)
+        while (Next(fe) != NIL) do
+            fe <- Next(fe)
+        Next(fe) <- newEdge
+
+function CountInboundEdges(G: Graph, X: integer) → integer
+    { Mengembalikan jumlah edge yang menuju node ber-id X. }
+
+    { KAMUS LOKAL }
+        count : integer
+    
+    { ALGORITMA }
+        count <- 0
+    edge <- FirstEdge(G)
+    while (edge != NIL) do
+        if (Id(Target(edge)) = X) then
+            count <- count + 1
+        edge <- Next(edge)
+    -> count
+
+{ RELASI M-N }
+    type AdrPasien: { type terdefinisi, alamat sebuah elemen list pasien }
+    type AdrKontak: { type terdefinisi, alamat sebuah elemen list kontak }
+    type AdrTracing: { type terdefinisi, alamat sebuah elemen list tracing }
+    type Pasien: < Nama: string, NextPasien: AdrPasien >
+    type Kontak: < NamaKontak: string, JumlahKontakPasienCovid: integer, NextKontak: AdrKontak >
+    type Tracing: < PPasien: AdrPasien, PKontak: AdrKontak, NextTracing: AdrTracing >
+    { PPasien adalah tracing kontak PKontak }
+
+    { Anggap setiap atribut 3 tipe di atas dapat diakses dengan selektor sesuai nama
+    atributnya, Misalnya Nama(PP) untuk atribut Nama dari pasien PP. Elemen list dapat
+    diciptakan dengan fungsi bernama Alokasi(), misal PP ← Alokasi(“Thanos”)}
+    type ListPasien: AdrPasien
+    type ListKontak: AdrKontak
+    type ListTracing: AdrTracing
+
+procedure AddTracing(input FirstPasien: ListPasien,
+    i/o FirstKontak: ListKontak,
+    i/o FirstTracing: ListTracing
+    input PP: AdrPasien, input PK: AdrKontak)
+    
+    { Menambah tracing baru yg menyatakan adanya kontak antar pasien PP dengan kontak PK.
+    I.S. PP dan PK masing-masing ada di ListPasien dan ListKontak, PP bukan orang
+    yang sama dengan PK
+    F.S. Jika alokasi berhasil, sebuah tracing baru yang menyatakan adanya kontak antara
+    antara PP dan PR ditambahkan; jumlah kontak pasien covid PK disesuaikan. Jika
+    alokasi tidak berhasil, tidak ada perubahan pada list tracing.}
+
+    { KAMUS LOKAL }
+        trace     : AdrTracing
+        kontak    : AdrKontak
+        found     : boolean
+
+    { ALGORITMA }
+        { INSERT LAST PADA TRACING }
+        trace <- FirstTracing
+        while (NextTracing(trace) != Nil) do
+            trace <- NextTracing(trace)
+        NextTracing <- AlokTracing(PP,PK)
+
+        { Edit Kontak PP }
+        kontak <- FirstKontak
+        found <- false
+
+        while (kontak != NIL) and (not found) do
+            if (NamaKontak(kontak) = NamaKontak(PP)) then
+                JumlahKontakPasienCovid(kontak) <- JumlahKontakPasienCovid(kontak) + 1
+                found <- true
+            kontak <- NextKontak(kontak)
+
+        { Edit Kontak PK }
+        kontak <- FirstKontak
+        found <- false
+
+        while (kontak != NIL) and (not found) do
+            if (NamaKontak(kontak) = NamaKontak(PK)) then
+                JumlahKontakPasienCovid(kontak) <- JumlahKontakPasienCovid(kontak) + 1
+                found <- true
+            kontak <- NextKontak(kontak)
+
+function Epidemic (FirstPasien: ListPasien, FirstKontak: ListKontak,
+                   FirstTracing: ListTracing, Ps: string) → real
+    
+    { Menghitung berapa jumlah kontak yang pernah ditemui seorang pasien bernama Ps,
+    dibandingkan dengan total jumlah kontak di kota Asgard. Ps ada pada list Pasien.
+    Misalkan jumlah kontak yang pernah ditemui Ps 5, total jumlah di kota Asgard 36,
+    sehingga nilai yang dikirimkan adalah 5/36 atau 0.14. }
+        
+    { KAMUS LOKAL }
+        nKontak,nKontakTotal     : integer
+        lk                       : AdrKontak
+        found                    : boolean
+
+    { ALGORITMA }
+        { Mencari Jumlah Kontak Ps }
+        lk <- FirstKontak
+        found <- false
+
+        while (lk != NIL) and (not found) do
+            if(NamaKontak(lk) = Ps) then
+                nKontak <- JumlahKontakPasienCovid(lk)
+                found <- true
+            lk <- NextKontak(lk)
+
+        { Mencari Jumlah Kontak Total }
+        lk <- FirstKontak
+        nKontakTotal <- 0
+        while (lk != NIL) and (not found) do
+            nKontakTotal <- nKontakTotal + 1
+            lk <- NextKontak(lk)
+
+        { Output Akhir }
+        -> nKontak / nKontakTotal
+
+function IsCommon(FirstPasien: ListPasien, FirstKontak: ListKontak,
+                  FirstTracing: ListTracing, P1: string, P2: string) → boolean
+
+    { Mencari tahu apakah pasien bernama P1 dan P2 memiliki minimal 1 kontak yang sama. }
+    
+    { KAMUS LOKAL }
+        found   : boolean
+        kontak  : AdrPasien
+
+    { ALGORITMA }
+    found <- false
+    ft <- FirstTracing
+    ft2 <- FirstTracing
+
+    while (ft != NIL and not found) do
+        if (Nama(PPasien(ft) = P1)) then
+            kontak <- PKontak(ft)
+            while (ft2 != NIL) and (not found) do
+                if (PKontak(ft2) = kontak) and (Nama(PPasien(ft2)) = P2) then
+                    found <- true
+                ft2 <- NextTracing(ft2)
+        ft <- NextTracing(ft)
+    -> found

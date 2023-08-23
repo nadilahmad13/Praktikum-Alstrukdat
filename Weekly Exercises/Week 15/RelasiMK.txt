@@ -1,0 +1,22 @@
+Sem 3
+Algeo -> Mat 1A
+TBFO -> MatDis, Alstrukdat
+
+Sem 4
+PBO -> Alstrukdat
+Probstat -> Mat 1A, Mat 2A, MatDis
+
+Sem 5
+AI -> LogKom, TBFO, Probstat, Stima
+Webdev -> PBO, Alstrukdat
+Jarkom -> OS
+SI -> Basdat, RPL
+MPPL -> RPL
+Interaksi Manusia Komputer -> RPL
+
+Sem 6
+Pengembangan Aplikasi pada Platform Khusus -> Orkom, Alstrukdat
+Pem. Mesin -> AI, Alstrukdat
+Sistem Paralel dan Terdistribusi -> Jarkom
+Proyek Perangkat Lunak -> MPPL, RPL
+Grafika Komputer -> Orkom, Alstrukdat, Algeo

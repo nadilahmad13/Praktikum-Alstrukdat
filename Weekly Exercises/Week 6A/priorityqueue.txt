@@ -1,0 +1,41 @@
+Program Priority_Queue
+    constant IDX_UNDEF : integer = -1
+    constant CAPACITY : integer = 100
+
+    type ElType : < id   : integer,
+                    cost : integer>
+
+    type Queue : < buffer : array[0.CAPACITY-1] of ElType,
+                   IdxHead : integer, { indeks elemen pertama }
+                   IdxTail : integer  { indeks elemen terakhir }>
+
+procedure enqueue(input/output q : Queue, input val : ElType)
+{Proses : menambahkan val sebagai elemen baru di q, dengan
+          memperhatihan lamanya waktu pekerjaan tsb dapat
+          diselesaikan, yaitu pekerjaan yang lebih cost diletakkan
+          lebih akhir. Jika ada 2 pekerjaan yang cost waktunya sama,
+          pekerjaan terakhir yang baru datang disisipkan lebih 
+          belakang}
+{I.S. : q mungkin kosong, tetapi tidak penuh}
+{F.S. : val menjadi elemen q yang baru dengan urutan waktu pekerjaan membesar}
+
+if (q.IdxHead == IDX_UNDEF) then {JIKA KOSONG}
+    q.IdxHead = 0
+    q.IdxTail = 0
+    q.buffer[q.IdxTail] = val
+else {JIKA TIDAK KOSONG}
+    if (q.IdxTail == CAPACITY-1) then
+        q.IdxTail = 0
+    else
+        q.IdxTail = q.IdxTail + 1
+    q.buffer[q.IdxTail] = val
+
+{SORT BERDASARKAN COST MEMBESAR}
+i Traversal [q.IdxHead..q.IdxTail]
+    j Traversal [q.IdxHead..q.IdxTail]
+        if (q.buffer[i].cost < q.buffer[j].cost) then
+            temp = q.buffer[i]
+            q.buffer[i] = q.buffer[j]
+            q.buffer[j] = temp
+
+procedure dequeue(input/output q : Queue, output val : ElType)

@@ -1,0 +1,249 @@
+{ LIST REKURSIF }
+contant Nil : ...
+type infotype : integer
+type ElmtList : < Info : infotype, Next : address >
+type address : pointer to ElmtList
+type List : address
+
+function isKelipatanX(L : List, X : integer) -> boolean;
+    { Mengirimkan true jika semua elemen L adalah kelipatan X }
+
+    { KAMUS LOKAL }
+        -
+    { ALGORITMA }
+        if (isOneElement(L)) then {basis}
+            -> L^.Info mod x = 0 {boolean}
+        else
+            -> (L^.Info mod x = 0) and isKelipatanX(L^.Next, x)
+
+function sortedMerge (L1, L2 : List) -> List
+{ Menerima list L1 dan L2 yang terurut membesar,
+    mengembaikan list yang merupakan gabungan L1 dan L2
+    dan tetap terurut membesar }
+
+{ KAMUS LOKAL }
+    -
+
+{ ALGORITMA }
+    if (isEmpty(L1)) then
+        -> L2
+    else if (isEmpty(L2)) then
+        -> L1
+    else
+        if (L1^.Info < L2^.Info) then
+            L3^.Info <- L1^.Info
+            L3^.Next <- sortedMerge(L1^.Next, L2)
+            -> L3 
+        else
+            L3^.Info <- L2^.Info
+            L3^.Next <- sortedMerge(L1, L2^.Next)
+            -> L3
+
+procedure deleteAlternate (input/output L : List, input isOdd : boolean)
+    { I.S. List L terdefinisi dan tidak kosong
+      F.S. Menghasilkan list L yang telah dihapus seluruh elemen pada urutan ganjil atau genap 
+           jika isOdd bernilai true maka elemen yang dihapus adalah elemen pada urutan ganjil
+           jika isOdd bernilai false maka elemen yang dihapus adalah elemen pada urutan genap}
+    { KAMUS LOKAL }
+        -
+    { ALGORITMA }
+        if (isOneElement(L))
+            if (isOdd) then
+                L <- NIL
+        else
+            if(isOdd) then
+                deleteAlternate(L^.Next, false)
+                L <- L^.Next
+            else
+                deleteAlternate(L^.Next, true)
+
+{ POHON BINER }
+constant Nil    : ...
+type Infotype   : <Name : string, Weight : integer, Count : integer >
+type Node       : <Info : Infotype, Left : BinTree, Right : BinTree >
+type adrNode    : pointer to Node
+type BinTree    : adrNode
+
+function sumAllWeight(P : BinTree) -> integer
+    { Mengirimkan total weight pada pohon P}
+    
+    { KAMUS LOKAL }
+
+    { ALGORTIMA }
+        if (isTreeEmpty(P)) then
+            -> 0
+        else
+            -> (Weight(P) * Count(P)) + sumAllWeight(LEFT(P)) + sumAllWeight(RIGHT(P))
+
+function maxOccurence (P : BinTree) -> BinTree
+{ Mengirimkan alamat node pada pohon P yang Weight-nya muncul paling banyak,
+ (Count terbesar). Jika ada lebih dari satu Count tertinggi , kirim node yang weight tertinggi}
+
+    { KAMUS LOKAL }
+
+    { ALGORITMA }
+    if isTreeOneElmt(P) then {basis}
+        → P
+    else {rekuerens}
+        depend on P
+            isUnerRight(P): rest ← maxOccurance(Right(P))
+            isUnerLeft(P): rest ← maxOccurance(Left(P))
+            isBiner(P):
+                left ← maxOccurance(Left(P))
+                right ← maxOccurance(Right(P))
+                if Count(left) = Count(right) then
+                    if Weight(left) > Weight(right) then
+                        rest ← left
+                    else
+                        rest ← right
+                else
+                    if Count(left) > Count(right) then
+                        rest ← left
+                    else
+                        rest ← right
+
+        {bandingin rest sama akar, sejajar di dalam else rekuerens}
+        if Count(rest) = Count(P) then
+            if Weight(rest) > Weight(P) then
+                → rest
+            else
+                → P
+        else
+            if Count(rest) > Count(P) then
+                → rest
+            else
+                → P
+
+{ GRAF PERTEMANAN }
+constant Nil : ...
+type adrOrang: pointer to Orang 
+type adrTeman: pointer to Teman 
+type Orang: < Nama  : string,
+              Teman : adrTeman,
+              Next  : adrOrang >
+
+type Teman: < Nama  : string,
+              Next  : adrTeman >
+
+type Graph: < First  : adrOrang >
+
+procedure tambahTeman(i/o G : Graph, input siA, siB : string)
+{Terbentuk pertemanan antara siA dan siB}
+
+    { KAMUS LOKAL }
+    adrA, adrB      : adrOrang
+    temanA, temanB  : adrTeman 
+
+    { ALGORITMA }
+
+    { MENCARI ADRESS BERDASARKAN NAMA }
+    adrA <- cariOrang(G,siA)
+    adrB <- cariOrang(G,siB)
+
+    { HANDLING JIKA NAMA TIDAK DITEMUKAN }
+    if (adrA = NIL) then
+        tambahOrang(G, siA, adrA)
+    if (adrB = NIL) then
+        tambahOrang(G, siB, adrB)
+
+    { INISIASI temanA dan temanB }
+    temanA <- Teman(adrA)
+    temanB <- Teman(adrB)
+
+    { INSERT LAST TEMAN }
+    { TRAVERSAL adrTeman sampai NIL}
+    while ((Next(temanA)) != NIL) do
+        temanA <- Next(temanA)
+    Next(temanA) <- newTeman(siB)
+
+    while ((Next(temanB)) != NIL) do
+        temanB <- Next(temanB)
+    Next(temanB) <- newTeman(siA)
+z
+function apakahBerteman (G : Graph, siX : string) -> boolean
+    { Mengembalikan true jika siX ada pada G dan berteman dengan orang paling gaul}
+
+    { KAMUS LOKAL }
+    adrX            : adrOrang
+    siGaul          : string
+    temanX          : adrTeman
+
+    { ALGORTIMA }
+    
+    adrX <- cariOrang(G, siX) {Mencari address siX}
+
+    { CEK DLU APAKAH siX ada di Graph}
+    if (adrX = NIL) then
+        -> false
+    else
+        siGaul <- palingGaul(G) {Mencari si gaul}
+
+        if (siGaul = '-') then  {Cek ada sipaling gaul gax}
+            -> false
+        else
+            temanX <- Teman(adrX)
+            found <- false 
+            while (temanX != NIL and not found) do 
+                if(Nama(temanX) = siGaul)
+                    found <- true
+                temanX <- Next(temanX)
+            -> found
+
+{ RELASI M-N }
+{ KAMUS }
+type AdrMgr         : {type terdefinisi, alamat sebuah elemen list Manager}
+type AdrFC          : {type terdefinisi, alamat sebuah elemen list Football Club}
+type AdrCt          : {type terdefinisi, alamat sebuah elemen list Contract}
+type Manager        : < Nama : string, NextMgr : AdrMgr >
+type FootballClub   : < NamaFC : string, JumlahMgr : integer, NextFC : AdrFC >
+type Contract       : < PMgr : AdrMgr, PFC : AdrFC, NextContract : AdrCt >
+type ListMgr        : AdrMgr
+type ListFC         : AdrFC
+type ListContract   : AdrCt
+
+function portofolio (FirstMgr : ListMgr, FirstFC : ListFC, FirstContract : ListContract, Mgr : string) -> real 
+    { Total Kontrak dibagi dengan Jumlah Football Club }
+
+    { KAMUS LOKAL }
+    nFC,nMgr    : integer
+
+    { ALGORITMA }
+
+    { MENGHITUNG BANYAK FOOTBALL CLUB }
+    nFc <- 0
+    while (ListFC != NIL) do
+        nFc <- nFc + 1
+        ListFC <- NextFC(ListFC)
+
+    { MENCARI BANYAK KONTRAK DENGAN Pmgr = AdrMgr }
+    nMgr <- 0
+    while (FirstContract != NIL) do
+        if (Nama(PMgr(FirstContract)) = Mgr) then
+            nMgr <- nMgr + 1
+        FirstContract <- NextContract(FirstContract)
+
+    { RETURN }
+    -> nMgr / nFC
+
+function isAlumni (FirstMgr : ListMgr, FirstFC : ListFC, FirstContract : ListContract, 
+                    M1 : string, M2 : string) -> boolean
+    { Mencari tahu apakah manager M1 dan M2 pernah menangani FC yang sama }
+
+    { KAMUS LOKAL }
+    found       : boolean
+
+    { ALGORITMA }
+    found <- false
+    lc <- FirstContract
+
+    while (lc != NIL and not found) do
+        if (Nama(PMgr(lc)) = M1) then
+            namaClub <- NamaFC(lc)
+            lc2 <- FirstContract
+            while (lc2 != NIL) and (not found) do
+                if (NamaFC(lc2) = namaClub) and (Nama(Pmgr(lc2)) = M2) then
+                    found <- true
+                lc2 <- NextContract(lc2)
+        lc <- NextContract(lc)
+
+    -> found

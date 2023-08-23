@@ -1,0 +1,21 @@
+function searchTopo (l: ListTopo, x: char) → <boolean, boolean>
+    { boolean pertama akan bernilai true jika x muncul sebagai
+    prec pada salah satu elemen sisa list l
+    boolean kedua akan bernilai true jika x muncul sebagai
+    succ pada salah satu elemen sisa list l }
+
+    { KAMUS LOKAL }
+        precFound, succFound    : boolean
+        lt                      : Address
+
+    { ALGORITMA }
+    precFound, succFound <- false
+    lt <- first(ListTopo)
+    while (lt != NIL) and (not precFound and not succFound) do
+        if(succ(lt) = X) then
+            succFound <- true
+        if(prec(lt) = X) then
+            precFound <- true
+        lt <- next(lt)
+        
+    -> (precFound,succFound)

@@ -1,0 +1,29 @@
+= = = = = NOMOR 2 = = = = = 
+Program OpenSesame
+{ Membaca pita karakter dan memeriksa apakah huruf awal kata-kata dalam pita
+ karakter jika disusun secara berurutan membentuk kata "opensesame" }
+
+USE mesinkata1 {ADT mesin kata, model akuisisi versi 1}
+
+KAMUS
+    CountKT : integer { Menghitung kemunculan kata }
+
+functionn IsInOs (Kt : Kata, Ct : integer) → boolean
+{ Menghasilkan true jika karakter ke-0 dari Kt = karakter pada posisi ke-Ct dari
+  OpenSesame }
+
+ALGORITMA
+    STARTKATA
+    CtKt ← 0
+    if (not(EndKata)) then
+        while (not(EndKata) and (IsInOs(CKata, CtKt)) and CtKt < 10) do
+            ADVKATA
+            CtKt ← CtKt + 1
+        { EndKata = true or not(IsInOS (CKata, CtKt) or CtKt = 10) }
+    
+        if (CtKt = 10 and IsInOs (CKata, CtKt)) then
+            output("Open sesame!")
+        else
+            output("Bukan pita yang tepat.")
+    else {Pita Kosong}
+        output("Pita karakter kosong")

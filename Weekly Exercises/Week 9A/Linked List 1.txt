@@ -1,0 +1,62 @@
+{ DEKLARASI TIPE }
+type ElType : integer
+type Address : pointer to Node
+type Node : < info : ElType,
+              next : Address >
+type List : Address
+
+function countPos (l : list) -> integer
+{Fungsi untuk menghiotung banyaknya kemunculan bilangan positif pada l}
+
+{KAMUS LOKAL}
+    P : Address
+    count : integer
+
+{ALGORITMA}
+    p <- l 
+    count <- 0
+    while (p != NIL) do
+        if (p^.info > 0) then
+            count <- count + 1
+        p <- p^.next
+    { p = NIL }
+    -> count
+
+function max(l : list) -> integer
+{Fungsi untuk mengembalikan nilai maksimum pada l}
+
+{KAMUS LOKAL}
+    P : Address
+    max : integer
+
+{ALGORITMA}
+    p <- l
+    max <- p^.info
+    while (p != NIL) do
+        if (p^.info > max) then
+            max <- p^.info
+        p <- p^.next
+    { p = NIL }
+    -> max
+
+function searchPos(l : list) -> Address
+{Fungsi untuk mencari elemen pertama yang bernilai positif pada l}
+
+{KAMUS LOKAL}
+    P : Address
+    found : Boolean
+    
+{ALGORITMA}
+    p <- l
+    found <- false
+    while (p != NIL) and (not found) do
+        if (p^.info > 0) then
+            found <- true
+        else
+            p <- p^.next
+    { p = NIL or found }
+
+    if (found) then
+        -> p
+    else
+        -> NIL

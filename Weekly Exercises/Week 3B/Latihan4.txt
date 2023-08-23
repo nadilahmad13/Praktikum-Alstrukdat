@@ -1,0 +1,31 @@
+procedure closestPair (input l: List; output p1,p2: ElType) 
+    { I.S.: l terdefinisi, mungkin kosong, p1 dan p2 sembarang. }
+    { F.S.: Jika l tidak kosong, p1 dan p2 berisi 2 elemen l pada posisi
+            berurutan yang memiliki selisih (selalu positif) terkecil. 
+            Jika kedua elemen nilainya berbeda, maka p1 adalah elemen yang bernilai lebih kecil. 
+            Jika ada beberapa pasang elemen yang memiliki selisih terkecil,
+            maka diambil pasangan elemen yang muncul pertama kali.
+            Jika l kosong atau hanya terdiri atas 1 elemen, p1 dan p2 berisi elemen tidak terdefinisi yaitu -999 }
+
+    { Contoh:l.ti = [5,3,10,11,20,19]; maka p1=10 dan p2=11 
+            l.ti = [-2,10,7,30,40,43,9]; maka p1=7  dan p2=10
+            l.ti = [-2,10,10,40,40]; maka p1=10 dan p2=10 }
+
+    KAMUS LOKAL
+        min, selisih: integer;
+        i, j: integer;
+        temp: ElType;
+        found: boolean;
+
+    ALGORITMA
+        if (length(l.ti) == 0)then
+            p1 <- -999;
+            p2 <- -999;
+        else
+            min <- 999;
+            i traversal [0..length(l.ti)-1]
+                j traversal [i+1..length(l.ti)-1]
+                    if ( (getElmt(l.ti,i) - getElmt(l.ti,j)) < min ) then
+                        min <- getElmt(l.ti,i) - getElmt(l.ti,j);
+                        p1 <- getElmt(l.ti,i);
+                        p2 <- getElmt(l.ti,j);

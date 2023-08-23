@@ -1,0 +1,68 @@
+Program Time
+{ Program untuk melakukan manipulasi data waktu }
+
+{ KAMUS }
+    type Time   : < hours   : integer.
+                    minutes : integer,
+                    seconds : integer>
+
+procedure CreateTime (input t : Time, input h : integer, input m : integer, input s : integer)
+    { I.S. : input adalah waktu yang akan dibuat }
+    { F.S. : menghasilkan waktu yang sudah dibuat }
+
+    { ALGORITMA }
+    t.hours <- h
+    t.minutes <- m
+    t.seconds <- s
+
+function isTimeValid (input h : integer, input m : integer, input s : integer ) -> boolean
+    { I.S. : menerima input h,m, dan s}
+    { F.S. : menyatakan bahwa input h,m, dan s adalah waktu atau bukan}
+
+    { ALGORITMA }
+    -> ((h >= 0) and (h < 24)) and ((m >= 0) and (m < 60)) and ((s >= 0) and (s < 60))
+
+procedure readTime (input t : Time)
+    { I.S. : input adalah sebuah type waktu }
+    { F.S. : sebuah waktu yang merupakan hasil bacaan }
+
+    { KAMUS LOKAL }
+        h,m,s : integer
+
+    { ALGORITMA }
+    while (not isTimeValid(h,m,s)) do
+        input(h)
+        input(m)
+        input(s)
+    CreateTime(time,h,m,s)
+
+procedure displayTime(input t : Time)
+    { I.S. : Menerima input type waktu }
+    { F.S. : Menampilkan waktu pada layar }
+
+    { ALGORITMA }
+    output(t.hours, ":", t.minutes, ":", t.seconds)
+
+function timeToSeconds (input t : Time) -> integer
+    { I.S. : Menerima input type waktu }
+    { F.S. : Menghasilkan jumlah detik dari waktu }
+
+    { ALGORITMA }
+    -> (t.hours * 3600) + (t.minutes * 60) + t.seconds
+
+function secondsToTime (input n : integer) -> Time
+    { I.S. : Menerima input detik }
+    { F.S. : Menghasilkan waktu dari detik }
+
+    { KAMUS LOKAL }
+        h,m,s,sisa : integer
+        t1 : Time
+
+    { ALGORITMA }
+    n <- n % 86400
+    h <- n / 3600
+    sisa <- n % 3600
+    m <- sisa / 60
+    s <- sisa % 60
+    CreateTime(t1,h,m,s)
+    -> t1

@@ -1,0 +1,96 @@
+{ SOAL NO. 1 }
+{ Buatlah prosedur insertFirst untuk sebuah list l dengan l adalah list
+    yang mencatat elemen pertama (First) dan elemen terakhir (Last) }
+
+procedure insertFirst (input/output l : List, input x : ElType)
+{I.S. l mungkin kosong, list ini termasuk list linier yang dicatat alamat
+    elemen pertama dan terakhir }
+{F.S. x menjadi elemen pertama l}
+
+{ KAMUS LOKAL }
+    p : Address
+
+{ ALGORITMA }
+    p <- newNode(x)
+    if (l = NIL) then
+        l^.first <- p
+        l^.last <- p
+    else
+        p^.next <- l^.first
+        l^.first <- p
+
+{ SOAL NO. 2 }
+{ Buatlah prosedur insertLast untuk sebuah list l dengan l adalah list
+    yang mencatat elemen pertama (First) dan elemen terakhir (Last) }
+
+procedure insertLast(input/output l : List, input x : ElType)
+{I.S. l mungkin kosong, list ini termasuk list linier yang dicatat alamat
+    elemen pertama dan terakhir }
+{F.S. x menjadi elemen terakhir l}
+
+{ KAMUS LOKAL }
+    p : Address
+
+{ ALGORITMA }
+    p <- newNode(x)
+    if (l = NIL) then
+        l^.first <- p
+        l^.last <- p
+    else
+        l^.last^.next <- p
+        l^.last <- p
+
+{ SOAL NO. 3 }
+{ Buatlah fungsisearch untuk mengetahui apakah sebuah nilai x terdapat dalam
+ sebuahlist l. l adalah List yang mencatat elemen pertama (First) dan elemen 
+ terakhir (Last) dan elemen terakhir adalah dummy. }
+
+function search (l : List, x : ElType) -> Boolean
+{Mengembalikan true jika x terdapat dalam l}
+
+{ KAMUS LOKAL }
+    p : Address
+
+{ ALGORITMA }
+    l^.last^.info <- x
+    p <- l^.first
+    while (p^.info != x) do
+        p <- p^.next
+    -> (p != l^.last)
+
+{ SOAL NO. 4 }
+void dequeue (PrioQueue *q, ElType *x, int *pr)
+/* Proses menghapus x pada bagian HEAD dari q dan mendealkoasi elemen HEAD
+   q. I.S. q tidak mungkin kosong */
+/* F.S. x adalah nilai elemen HEAD pd I.S., HEAD *mundur* */
+
+{ KAMUS LOKAL }
+    p : Address
+
+{ ALGORITMA }
+    p <- q^.first
+    *x <- p^.info
+    *pr <- p^.priority
+    q^.first <- p^.next
+    dealokasi(p)
+
+{ SOAL NO. 5 }
+void enqueue (PrioQueue *q, ElType x, int pr)
+{ I.S. q mungkin kosong }
+{ F.S. x ditambahkan pada bagian TAIL dari q sesuai dengan prioritasnya }
+
+{ KAMUS LOKAL }
+    p : Address
+    loc : Address
+
+{ ALGORITMA }
+    p <- newNode(x)
+    p^.priority <- pr
+    if (q^.first = NIL) then
+        q^.first <- p
+    else
+        loc <- q^.first
+        while (loc^.next != NIL) and (loc^.next^.priority > pr) do
+            loc <- loc^.next
+        p^.next <- loc^.next
+        loc^.next <- p

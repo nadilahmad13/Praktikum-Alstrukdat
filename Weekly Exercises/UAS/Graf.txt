@@ -1,0 +1,148 @@
+{ ADT Graph }
+{ Graph berarah diimplementasi sebagai Multilist }
+constant NIL: ... 
+type AdrNode: pointer to Node
+type AdrSuccNode: pointer to SuccNode
+type Node: < id: integer, {identitas simpul}
+             nPred: integer, {jumlah busur yang masuk ke simpul = jumlah simpul pred}
+             trail: AdrSuccNode, {pointer ke list trailer (simpul successor)}
+             next: AdrNode >
+type SuccNode: < succ: AdrNode, {address simpul successor}
+                 next: AdrSuccNode >
+type Graph: < first: AdrNode >
+
+{ *** Konstruktor *** }
+procedure CreateGraph (input x: integer, output g: Graph)
+    { I.S. Sembarang; F.S. Terbentuk Graph dengan satu simpul dengan Id=X }
+    { *** Manajemen Memory List Simpul (Leader) *** }
+    
+
+function newGraphNode(x: integer) → AdrNode
+    { Mengembalikan address hasil alokasi Simpul x. }
+    { Jika alokasi berhasil, maka address tidak NIL, misalnya
+    menghasilkan p, maka p↑.id=x, p↑.nPred=0, p↑.trail=NIL,
+    dan p↑.next=NIL. Jika alokasi gagal, mengembalikan NIL. }
+
+procedure deallocGraphNode (input p: AdrNode)
+    { I.S. P terdefinisi; F.S. P dikembalikan ke sistem }
+    { *** Manajemen Memory List Successor (Trailer) *** }
+
+function newSuccNode (pn: AdrNode) → AdrSuccNode
+    { Mengembalikan address hasil alokasi. }
+    { Jika alokasi berhasil, maka address tidak NIL, misalnya 
+    menghasilkan pt, maka pt↑.succ=pn dan pt↑.next=NIL. Jika
+    alokasi gagal, mengembalikan NIL. }
+
+procedure deallocSuccNode (input p: AdrSuccNode)
+    { I.S. p terdefinisi; F.S. p dikembalikan ke sistem }
+
+{ *** Fungsi/Prosedur Lain *** }
+function searchNode (g: Graph, x: integer) → AdrNode
+    { mengembalikan address simpul dengan id=x jika sudah ada pada graph g, 
+    NIL jika belum } 
+    
+    { KAMUS LOKAL }
+        P : AdrNode
+
+    { ALGORITMA }
+        P ← g.first
+        while (P ≠ NIL) and (P↑.id ≠ x) do
+            P ← P↑.next
+        -> P
+
+function searchEdge (g: Graph, prec: integer, succ: integer) → adrSuccNode
+    { mengembalikan address trailer yang menyimpan info busur <prec,succ>
+    jika sudah ada pada graph g, NIL jika belum } 
+
+    { KAMUS LOKAL }
+        P : AdrNode
+        PT : AdrSuccNode
+
+    { ALGORITMA }
+        P ← searchNode(g,prec)
+        if (P ≠ NIL) then
+            PT ← P↑.trail
+            while (PT ≠ NIL) and (PT↑.succ↑.id ≠ succ) do
+                PT ← PT↑.next
+        else
+            PT ← NIL
+        -> PT
+
+procedure insertNode (input/output g: Graph, input x: integer, output pn: adrNode)
+    { Menambahkan simpul x ke dalam graph g, jika alokasi x berhasil. }
+    { I.S. g terdefinisi, x terdefinisi dan belum ada pada g. }
+    { F.S. Jika alokasi berhasil, x menjadi elemen terakhir g, pn berisi
+    address simpul x. Jika alokasi gagal, g tetap, pn berisi NIL }
+
+    { KAMUS LOKAL }
+        P : AdrNode
+
+    { ALGORITMA }
+        pn ← newGraphNode(x)
+        if (pn ≠ NIL) then
+            if (g.first = NIL) then
+                g.first ← pn
+            else
+                P ← g.first
+                while (P↑.next ≠ NIL) do
+                    P ← P↑.next
+                P↑.next ← pn
+        -> pn
+
+procedure insertEdge (input/output g: Graph, input prec, succ: integer)
+    { Menambahkan busur dari prec menuju succ ke dalam G }
+    { I.S. g, prec, succ terdefinisi. }
+    { F.S. Jika belum ada busur <prec,succ> di g, maka tambahkan busur
+    <prec,succ> ke g. Jika simpul prec/succ belum ada pada g, 
+    tambahkan simpul tersebut dahulu. Jika sudah ada busur <prec,succ> 
+    di g, maka g tetap. }
+
+    { KAMUS LOKAL }
+        P, PS : AdrNode
+        PT : AdrSuccNode
+
+    { ALGORITMA }
+        P ← searchNode(g,prec)
+        if (P = NIL) then
+            insertNode(g,prec,P)
+        PS ← searchNode(g,succ)
+        if (PS = NIL) then
+            insertNode(g,succ,PS)
+        PT ← searchEdge(g,prec,succ)
+        if (PT = NIL) then
+            PT ← newSuccNode(PS)
+            if (PT ≠ NIL) then
+                PT↑.next ← P↑.trail
+                P↑.trail ← PT
+                PS↑.nPred ← PS↑.nPred + 1
+
+Procedure deleteNode (input/output g: Graph, input x: integer)
+    { Menghapus simpul x dari g }
+    { I.S. g terdefinisi, x terdefinisi dan ada pada g, jumlah simpul
+    pada g lebih dari 1. }
+    { F.S. simpul x dan semua busur yang terhubung ke x dihapus
+    dari g. }
+
+    { KAMUS LOKAL }
+        P, Pdel, Pprec : AdrNode
+        PT, PTdel : AdrSuccNode
+
+    { ALGORITMA }
+        P ← g.first
+        Pprec ← NIL
+        while (P ≠ NIL) and (P↑.id ≠ x) do
+            Pprec ← P
+            P ← P↑.next
+        if (P ≠ NIL) then
+            Pdel ← P
+            if (Pprec = NIL) then
+                g.first ← P↑.next
+            else
+                Pprec↑.next ← P↑.next
+            PT ← P↑.trail
+            while (PT ≠ NIL) do
+                PTdel ← PT
+                PT ↑.succ↑.nPred ← PT ↑.succ↑.nPred - 1
+                PT ← PT↑.next
+                deallocSuccNode(PTdel)
+            deallocGraphNode(Pdel)

@@ -1,0 +1,48 @@
+Program POLINOMIAL { Representasi KONTIGU }
+{ KAMUS }
+
+{ Struktur data untuk representasi polinom secara kontigu }
+    constant nMax: integer = 100 { Derajat tertinggi polinom yang diproses }
+    type Polinom: ⟨ degree: integer, 
+                    arrSuku: array [0..nMax] of integer ⟩
+    p1,p2: Polinom {Operan}
+    p3: Polinom { Hasil }
+
+{ Struktur data untuk interaksi }
+    finish: boolean { Mengakhiri proses }
+    pilihan: integer [0..5] { Nomor tawaran }
+
+{ Primitif operasi terhadap polinom yang dibutuhkan untuk proses }
+    procedure CreatePolinom (output p: Polinom) 
+        { Membuat polinom p yang kosong }
+
+    procedure adjustDegree (input/output p: polinom)
+        { Melakukan adjustment terhadap Degree. Diaktifkan jika akibat suatu 
+        operasi, derajat polinom hasil berubah.}
+
+{ Primitif operasi terhadap polinom yang disediakan untuk pemakai }
+    procedure populatePol (output p: polinom) 
+        { Mengisi polinom p }
+    procedure displayPol (input p: polinom) 
+        { Menulis polinom p }
+    procedure addPol (input p1, p2: polinom, output p3: polinom)
+        { Menjumlahkan p1 + p2 dan menyimpan hasilnya di p3, p3 != p1 dan p3 != p2 }
+
+    procedure subPol (input p1, p2: polinom, output p3: polinom)
+        { Mengurangkan p1 - p2 dan menyimpan hasilnya di p3, p3 != p1 dan p3 !+ p2 }
+
+    procedure derivPol (input p: polinom, output p1: polinom)
+        { Membuat turunan p dan menyimpan hasilnya di p1, p1 != p }
+
+{ POLINOM REPRESENTASI BERKAIT }
+{ KAMUS }
+{ Definisi sebuah polinom P adalah }
+    type Address: ... { terdefinisi alamat sebuah suku }
+    type Polinom: Address { alamat elemen pertama list }
+    type Suku: < degree: integer, 
+                 coef: integer, 
+                 next: Address >
+
+{ Polinom adalah List Suku, dengan elemen terurut menurun menurut 
+Degree }
+p1, p2, p3: Polinom

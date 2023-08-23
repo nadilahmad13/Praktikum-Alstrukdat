@@ -1,0 +1,46 @@
+Program Location
+{ Program yang menyimpan data lokasi, terdiri dari latitude,
+  longitude, dan location name. }
+
+    constant R : integer = 6371;
+    { R adalah jari-jari bumi dalam satuan kilometer. }
+
+    type Location : < lat : real {-90 .. 90},
+                    long : real {-180 .. 180},
+                    name : string >
+        { Location adalah tipe data yang menyimpan data lokasi. }
+
+    { KONSTRUKTOR }
+    procedure CreateLocation (output Loc : location)
+        { I.S. : Sembarang
+        F.S. : Location terdefinisi }
+
+    procedure ReadLocation (output Loc : location)
+        { I.S. : Sembarang
+        F.S. : Location terdefinisi }
+    
+    { SELEKTOR }
+    function GetLatitude (Loc : location) : real
+        { I.S. : Location terdefinisi
+          F.S. : Mengembalikan nilai latitude dari location }
+
+    function GetLongitude (Loc : location) : real
+        { I.S. : Location terdefinisi
+          F.S. : Mengembalikan nilai longitude dari location }
+
+    function GetName (Loc : location) : string
+        { I.S. : Location terdefinisi
+          F.S. : Mengembalikan nama lokasi }
+
+    { Primitif Lain }
+    procedure PrintLocation (Loc : location)
+        { I.S. : Location terdefinisi
+          F.S. : Lokasi ditampilkan ke layar }
+    
+    function isEquator (Loc : location) : boolean
+        { I.S. : Location terdefinisi
+          F.S. : Mengembalikan true jika lokasi berada di garis
+          khatulistiwa, false jika tidak }
+
+
+    

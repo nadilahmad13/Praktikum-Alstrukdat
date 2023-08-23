@@ -1,0 +1,84 @@
+Program Point
+{ Program untuk melakukan manipulasi data Point }
+
+{ KAMUS }
+    type Point : < x : real, {absis}
+                   y : real {ordinat}>
+
+procedure CreatePoint (output p : Point, input x : real, input y : real)
+    {I.S. : Menerima x dan y sebuah absis dan ordinat Point}
+    {F.S. : menghasilkan p, sebuah Point dengan absis x dan ordinat y}
+
+    {ALGORITMA}
+    p.x <- x
+    p.y <- y
+
+
+function getAbsis (input p : Point) -> real
+    {I.S. : Menerima p sebuah Point}
+    {F.S. : menghasilkan absis p}
+
+    { ALGORITMA }
+    -> p.x
+
+function getOrdinat (input p : Point) -> real
+    {I.S. : Menerima p sebuah Point}
+    {F.S. : menghasilkan ordinat p}
+    
+    { ALGORITMA }
+    -> p.y
+
+procedure setAbsis (input/output p : Point, input newX : real)
+    {I.S. : Menerima p sebuah Point}
+    {F.S. : mengubah absis p menjadi newX}
+    
+    { ALGORITMA }
+    p.x <- newX
+
+procedure setOrdinat (input/output p : Point, input newY : real)
+    {I.S. : Menerima p sebuah Point}
+    {F.S. : mengubah ordinat p menjadi newY}
+    
+    { ALGORITMA }
+    p.y <- newY
+
+procedure readPoint (output p : Point)
+    {I.S. : Menerima input type point}
+    {F.S. : Membentuk p dari x dan y yang dibaca}
+
+    { KAMUS LOKAL }
+        x,y : real
+    
+    { ALGORITMA }
+    input(x)
+    input(y)
+    CreatePoint(p,x,y)
+
+
+procedure displayPoint (input p : Point)
+    {I.S. : Menerima input type point}
+    {F.S. : Menampilkan p ke layar}
+
+    {ALGORITMA}
+    output(p.x)
+    output(p.y)
+
+
+function move (input p1 : Point, input dx,dy : real) -> Point
+    {I.S. : Menerima input type point dan banyaknya perpindahan}
+    {F.S. : Menghasilkan p, sebuah Point yang berpindah sebanyak dx dan dy}
+
+    { KAMUS LOKAL }
+        pt : Point
+    
+    { ALGORITMA }
+    CreatePoint(pt,p1.x+dx,p1.y+dy)
+
+    -> pt
+
+function isOrigin (input p : Point) -> boolean
+    { I.S. : Menerima sebuah input type point }
+    { F.S. : Mengembalikan true jika p adalah titik origin (0,0) }
+    
+    { ALGORITMA }
+    -> ((p.x = 0) and (p.y = 0))
