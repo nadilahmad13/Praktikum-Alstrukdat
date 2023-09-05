@@ -11,7 +11,7 @@ int main() {
     }
 
     // Menghitung nilai a (pin rahasia) dengan menggunakan interpolasi Lagrange
-    float a = 0;
+    int a = 0;
 
     for (i = 0; i < 3; i++) {
         float Li = 1;
@@ -24,7 +24,7 @@ int main() {
     }
 
     // Output Akhir
-    printf("%.0f\n", a);
+    printf("%d\n", a);
 
     return 0;
 }
