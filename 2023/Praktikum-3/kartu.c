@@ -9,8 +9,7 @@ void deleteFirst(ListDin *L, ElType *X)
     {
         ELMT(*L, i) = ELMT(*L, i + 1);
     }
-    NEFF(*L)
-    --;
+    NEFF(*L)--;
 }
 
 int main()
