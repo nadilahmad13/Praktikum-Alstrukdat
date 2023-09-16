@@ -9,8 +9,7 @@ void deleteAt(ListDin *L, int idx)
     {
         ELMT(*L, i) = ELMT(*L, i + 1);
     }
-    NEFF(*L)
-    --;
+    NEFF(*L)--;
 }
 
 void deleteEl(ListDin *L, int num)
